@@ -1,0 +1,24 @@
+{
+  "name": "leo-theme",
+  "displayName": "Leo Dark",
+  "description": "Leo's personal dark theme — Visual Studio Dark with custom UI tones and syntax colors, fully self-contained.",
+  "version": "1.0.0",
+  "publisher": "leo",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Leo Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/leo-dark-color-theme.json"
+      }
+    ]
+  }
+}
