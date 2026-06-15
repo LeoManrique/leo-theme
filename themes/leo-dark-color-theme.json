@@ -117,7 +117,7 @@
     { "scope": "emphasis", "settings": {"fontStyle": "italic"} },
     { "scope": "strong", "settings": {"fontStyle": "bold"} },
     { "scope": "header", "settings": {"foreground": "#000080"} },
-    { "scope": "comment", "settings": {"foreground": "#6A9955"} },
+    { "scope": "comment", "settings": {"foreground": "#649158"} },
     { "scope": "constant.language", "settings": {"foreground": "#5996db"} },
     { "scope": ["constant.numeric", "variable.other.enummember", "keyword.operator.plus.exponent", "keyword.operator.minus.exponent"], "settings": {"foreground": "#b5cea8"} },
     { "scope": "constant.regexp", "settings": {"foreground": "#646695"} },
@@ -166,7 +166,7 @@
     // ── LEO · syntax overrides ──
     { "name": "Functions", "scope": ["entity.name.function"], "settings": {"foreground": "#d4d4d4"} },
     { "name": "Support functions (builtins: print, len, ...)", "scope": ["support.function"], "settings": {"foreground": "#d5b466"} },
-    { "name": "Strings", "scope": ["string", "punctuation.definition.string"], "settings": {"foreground": "#d59a66"} },
+    { "name": "Strings", "scope": ["string", "punctuation.definition.string"], "settings": {"foreground": "#d29d6c"} },
     // ── LEO · Markdown — all prose elements render white ──
     { "name": "Markdown inline code", "scope": ["markup.inline.raw", "markup.inline.raw.string.markdown", "punctuation.definition.raw.markdown"], "settings": {"foreground": "#d4d4d4"} },
     { "name": "Markdown link / table punctuation (bold kept)", "scope": ["punctuation.definition.string.begin.markdown", "punctuation.definition.string.end.markdown", "punctuation.definition.link.title.begin.markdown", "punctuation.definition.link.title.end.markdown", "punctuation.definition.link.begin.markdown", "punctuation.definition.link.end.markdown", "punctuation.definition.metadata.markdown", "punctuation.definition.constant.begin.markdown", "punctuation.definition.constant.end.markdown", "punctuation.separator.table.markdown", "punctuation.definition.table.markdown"], "settings": {"foreground": "#d4d4d4", "fontStyle": "bold"} },
