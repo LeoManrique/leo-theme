@@ -47,7 +47,7 @@
     // ── Inherited from Visual Studio Dark (unchanged) ──
     "checkbox.border": "#6B6B6B",
     "editor.foreground": "#D4D4D4",
-    "editor.inactiveSelectionBackground": "#3A3D41",
+    //"editor.inactiveSelectionBackground": "#3A3D41",
     "editorIndentGuide.background1": "#404040",
     "editorIndentGuide.activeBackground1": "#707070",
     "editor.selectionHighlightBackground": "#5996db26",
