@@ -1,10 +1,15 @@
 {
   "name": "leo-theme",
   "displayName": "Leo Dark",
-  "description": "Leo's personal dark theme with custom UI tones and syntax colors, fully self-contained.",
-  "version": "1.0.0",
+  "description": "A calm, low-contrast dark theme — muted blue accents, warm strings, no rainbow noise.",
+  "version": "1.0.1",
   "publisher": "leoshell",
   "license": "MIT",
+  "icon": "icon.png",
+  "homepage": "https://github.com/LeoManrique/leo-theme",
+  "bugs": {
+    "url": "https://github.com/LeoManrique/leo-theme/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/LeoManrique/leo-theme.git"
@@ -15,6 +20,17 @@
   "categories": [
     "Themes"
   ],
+  "keywords": [
+    "theme",
+    "dark",
+    "color theme",
+    "dark theme",
+    "minimal"
+  ],
+  "galleryBanner": {
+    "color": "#161616",
+    "theme": "dark"
+  },
   "contributes": {
     "themes": [
       {

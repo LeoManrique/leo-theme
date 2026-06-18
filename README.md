@@ -1,18 +1,32 @@
-# Leo Theme
+# Leo Dark
 
-A nice dark them that doesn't make your editor look like a rainbow. Inspired by VS Code's "Visual Studio Dark".
+A calm, low-contrast dark theme for VS Code. Muted blue accents, warm-amber
+strings, and quiet-but-deliberate punctuation — built to be easy on the eyes
+without turning your editor into a rainbow.
 
+## Highlights
 
-- **Source of truth:** [`themes/leo-dark-color-theme.json`](themes/leo-dark-color-theme.json) — edit it directly.
-- **Base type:** `vs-dark`.
+- **Layered dark surfaces** — chrome (sidebar, activity bar, title bar, status bar,
+  terminal) sits at `#1a1a1a`; the editor and inputs sit one step lighter at `#161616`,
+  so the working area stands out without harsh contrast.
+- **Muted blue accent** (`#5996db`) in place of the default bright blue — used for
+  selection, focus, keywords, and badges.
+- **Warm strings** (`#dec078`) and a **calm purple** (`#956ccc`) for operators and brackets.
+- **Tuned across languages** — JSON, Markdown, shell/bash, Python, JS/TS, CSS, and more.
+- **Semantic highlighting** enabled, with strikethrough for deprecated symbols.
 
-## Daily workflow (this is the whole point)
+## Install
 
-1. Open [`themes/leo-dark-color-theme.json`](themes/leo-dark-color-theme.json).
-2. Change a color / add a rule.
-3. **Cmd+Shift+P → Developer: Reload Window.** Done — no `settings.json` juggling, no
-   "can't override that key" limits, fully portable to any machine.
+1. Open the **Extensions** view (`Cmd/Ctrl+Shift+X`).
+2. Search for **Leo Dark**.
+3. Click **Install**.
+4. `Cmd/Ctrl+K` `Cmd/Ctrl+T` → select **Leo Dark**.
 
-> Tip: with the theme active, **Cmd+Shift+P → Developer: Inspect Editor Tokens and Scopes**
-> shows the exact TextMate scope + semantic token under the cursor, plus which theme rule
-> is coloring it. That's how you find the right `scope` to add.
+## Feedback
+
+Found a scope that's colored wrong, or have a suggestion? Open an issue:
+[github.com/LeoManrique/leo-theme/issues](https://github.com/LeoManrique/leo-theme/issues)
+
+## License
+
+[MIT](LICENSE) © Leonardo Manrique

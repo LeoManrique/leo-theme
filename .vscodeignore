@@ -1,6 +1,9 @@
 .git/
 .gitignore
 .vscodeignore
+.claude/
+*.vsix
 PUBLISHING.md
 TECHNICAL.md
 ROADMAP.md
+themes/leo-dark.json
