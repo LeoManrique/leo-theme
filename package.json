@@ -1,8 +1,8 @@
 {
   "name": "leo-theme",
   "displayName": "Leo Dark",
-  "description": "A calm, low-contrast dark theme — muted blue accents, warm strings, no rainbow noise.",
-  "version": "1.0.1",
+  "description": "A calm dark theme, no rainbow noise.",
+  "version": "1.0.2",
   "publisher": "leoshell",
   "license": "MIT",
   "icon": "icon.png",

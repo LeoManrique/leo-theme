@@ -1,8 +1,6 @@
 # Leo Dark
 
-A calm, low-contrast dark theme for VS Code. Muted blue accents, warm-amber
-strings, and quiet-but-deliberate punctuation — built to be easy on the eyes
-without turning your editor into a rainbow.
+A calm dark theme for VS Code. Built to highlight important stuff in code without turning your editor into a rainbow.
 
 ## Highlights
 
@@ -24,7 +22,7 @@ without turning your editor into a rainbow.
 
 ## Feedback
 
-Found a scope that's colored wrong, or have a suggestion? Open an issue:
+For any type or request or feedback you can open an issue at:
 [github.com/LeoManrique/leo-theme/issues](https://github.com/LeoManrique/leo-theme/issues)
 
 ## License
