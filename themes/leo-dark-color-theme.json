@@ -27,6 +27,9 @@
     "input.background": "#161616",
     "tab.activeBackground": "#161616",
     "list.hoverBackground": "#161616",
+    // ── LEO · Surfaces — popups (elevated: suggest, hover, find/replace, quick pick) ──
+    "editorWidget.background": "#1f1f1f",
+    "editorWidget.border": "#303031",
     // ── LEO · Borders & active selection ──
     "activityBar.border": "#2b2b2b",
     "sideBar.border": "#2b2b2b",
@@ -40,6 +43,14 @@
     "editorInlayHint.foreground": "#959595",
     "editorInlayHint.parameterForeground": "#959595",
     "editorInlayHint.typeForeground": "#959595",
+    // ── LEO · Selected row in popups — accent tint; the neutral list selection vanishes at this elevation ──
+    "editorSuggestWidget.selectedBackground": "#5996db66",
+    "editorSuggestWidget.selectedForeground": "#FFFFFF",
+    "editorSuggestWidget.selectedIconForeground": "#FFFFFF",
+    "editorSuggestWidget.focusHighlightForeground": "#FFFFFF",
+    "quickInputList.focusBackground": "#5996db66",
+    "quickInputList.focusForeground": "#FFFFFF",
+    "quickInputList.focusIconForeground": "#FFFFFF",
     // ── LEO · Scrollbar slider — translucent so it blends in ──
     "scrollbarSlider.background": "#3a3a3a50",
     "scrollbarSlider.hoverBackground": "#3a3a3a80",
