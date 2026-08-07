@@ -21,14 +21,14 @@
         "element.background": "#1a1a1a",
         "element.hover": "#222222",
         "element.active": "#2b2b2b",
-        "element.selected": "#2b2b2b",
+        "element.selected": "#3a3a3a",
         "element.disabled": "#1a1a1a",
         "drop_target.background": "#5996db40",
 
         "ghost_element.background": "#00000000",
         "ghost_element.hover": "#222222",
         "ghost_element.active": "#2b2b2b",
-        "ghost_element.selected": "#2b2b2b",
+        "ghost_element.selected": "#3a3a3a",
         "ghost_element.disabled": "#1a1a1a",
 
         "text": "#d4d4d4",
