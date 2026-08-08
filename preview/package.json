@@ -1,0 +1,10 @@
+{
+  "name": "leo-dark-preview",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Type stubs for the TS/TSX samples. Optional — run `npm i` here only if you want full semantic tokens in 02-react.tsx.",
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

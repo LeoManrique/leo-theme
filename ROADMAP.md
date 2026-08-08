@@ -1,19 +1,21 @@
 # Leo Theme Roadmap
 
-## v2 — porting to Zed (notes, not done yet)
-Zed themes are a single JSON file with a `style` object. Rough mapping:
+## Done
 
-| VS Code | Zed (`style`) |
-|---------|---------------|
-| `editor.background` | `editor.background` |
-| `sideBar.background` | `panel.background` / `surface.background` |
-| `tab.activeBackground` | `tab.active_background` |
-| `tab.inactiveBackground` | `tab.inactive_background` |
-| `statusBar.background` | `status_bar.background` |
-| `titleBar.activeBackground` | `title_bar.background` |
-| `terminal.background` | `terminal.background` |
-| TextMate `tokenColors` | `style.syntax.{name}.color` (e.g. `function`, `string`, `keyword`) |
+- **v2 — Zed port.** `themes/leo-dark.json` ships the full theme against schema
+  `v0.2.0`. Key mapping lives in [TECHNICAL.md](TECHNICAL.md).
+- **Parity corpus.** `preview/` — one sample per language plus a checklist for the
+  state-driven surfaces.
 
-Zed has no direct TextMate-scope system — syntax is keyed by a fixed set of capture names
-(`function`, `string`, `keyword`, `type`, `comment`, `variable`, ...), so the scope → name
-mapping is manual. Defer to v2.
+## Next
+
+- **Parity script.** `scripts/parity.mjs` holding the VS Code → Zed key map, reporting
+  keys present in one theme but missing from the other, and colors that drifted apart.
+  The corpus catches "this hex reads wrong in Zed"; the script catches "this fix only
+  landed in one file", which is the failure that actually keeps happening.
+- **Release the pending fixes.** The Zed selection-contrast change is committed but
+  `package.json` is still at `1.0.2` and `CHANGELOG.md` has no entry for either the
+  VS Code or the Zed selection work.
+- **Screenshots for the marketplace.** `preview/` doubles as the source. Same window
+  size, same files, one shot per editor, stored as a pair so releases stay diffable.
+- **Light variant.** Not started, no palette yet.

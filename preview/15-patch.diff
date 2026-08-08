@@ -1,0 +1,118 @@
+This is a saved patch, not the diff editor. It reaches Zed's `diff.plus` and
+`diff.minus` captures and VS Code's `source.diff` scopes — which are a
+different code path from the built-in diff view. Test both: this file for the
+grammar, and a real `git diff` for editorGutter.* and diffEditor.*.
+
+commit 4fca5c2e1d9b7a3c5f0e8d2a6b4c1e9f7a3d5b2c
+Author: Leonardo Manrique <leonardomanrique43@gmail.com>
+Date:   Thu Aug 7 10:08:00 2026 +0200
+
+    Raise selection contrast in the Zed theme
+
+diff --git a/themes/leo-dark.json b/themes/leo-dark.json
+index 8a3f1c2..d7e4b90 100644
+--- a/themes/leo-dark.json
++++ b/themes/leo-dark.json
+@@ -21,14 +21,14 @@
+     "border.variant": "#1f1f1f",
+     "border.focused": "#5996db",
+     "element.background": "#1a1a1a",
+     "element.hover": "#222222",
+     "element.active": "#2b2b2b",
+-    "element.selected": "#2b2b2b",
++    "element.selected": "#3a3a3a",
+     "element.disabled": "#1a1a1a",
+     "ghost_element.background": "#00000000",
+     "ghost_element.hover": "#222222",
+     "ghost_element.active": "#2b2b2b",
+-    "ghost_element.selected": "#2b2b2b",
++    "ghost_element.selected": "#3a3a3a",
+     "ghost_element.disabled": "#1a1a1a",
+     "text": "#d4d4d4",
+     "text.muted": "#8a8a8a",
+
+diff --git a/themes/leo-dark-color-theme.json b/themes/leo-dark-color-theme.json
+index 1b2c3d4..5e6f7a8 100644
+--- a/themes/leo-dark-color-theme.json
++++ b/themes/leo-dark-color-theme.json
+@@ -102,6 +102,9 @@
+     "list.activeSelectionBackground": "#2b2b2b",
+     "list.inactiveSelectionBackground": "#222222",
+     "list.hoverBackground": "#1f1f1f",
++    "quickInput.background": "#1a1a1a",
++    "quickInputList.focusBackground": "#3a3a3a",
++    "editorSuggestWidget.selectedBackground": "#3a3a3a",
+     "editorGroupHeader.tabsBackground": "#1a1a1a",
+     "tab.activeBackground": "#161616",
+     "tab.inactiveBackground": "#1a1a1a",
+@@ -210,10 +213,7 @@
+       {
+         "name": "Comments",
+         "scope": ["comment", "punctuation.definition.comment"],
+-        "settings": {
+-          "foreground": "#6a6a6a",
+-          "fontStyle": "italic"
+-        }
++        "settings": { "foreground": "#6a6a6a", "fontStyle": "italic" }
+       },
+
+diff --git a/preview/README.md b/preview/README.md
+new file mode 100644
+index 0000000..3c1a5f7
+--- /dev/null
++++ b/preview/README.md
+@@ -0,0 +1,5 @@
++# Preview corpus
++
++Files to open side by side in VS Code and Zed.
++
++See CHECKLIST.md for the surfaces a file cannot show.
+
+diff --git a/preview/old-notes.txt b/preview/old-notes.txt
+deleted file mode 100644
+index 9f8e7d6..0000000
+--- a/preview/old-notes.txt
++++ /dev/null
+@@ -1,3 +0,0 @@
+-Scratch notes that no longer apply.
+-Superseded by CHECKLIST.md.
+-Delete on sight.
+
+diff --git a/scripts/parity.mjs b/scripts/parity.mjs
+old mode 100644
+new mode 100755
+
+diff --git a/icon.png b/icon.png
+index 2a4b6c8..8c6b4a2 100644
+Binary files a/icon.png and b/icon.png differ
+
+diff --git a/preview/11-script.sh b/preview/11-script.sh
+similarity index 94%
+rename from preview/script.sh
+rename to preview/11-script.sh
+index 3d5f7a9..7a9f5d3 100755
+--- a/preview/script.sh
++++ b/preview/11-script.sh
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env bash
+
+ set -euo pipefail
++IFS=$'\n\t'
+
+-readonly VERSION='1.0.1'
++readonly VERSION='1.0.2'
+ readonly MAX_RETRIES=3
+
+--- a/context.txt	2026-08-08 14:47:50.000000000 +0200
++++ b/context.txt	2026-08-08 14:52:11.000000000 +0200
+@@ -1,7 +1,7 @@
+ unchanged context line one
+ unchanged context line two
+-removed line, should be red
++added line, should be green
+ unchanged context line three
+-another removed line
+-and one more removed
++one added line replacing two
+ unchanged context line four
+\ No newline at end of file

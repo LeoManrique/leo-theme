@@ -1,0 +1,275 @@
+// 06-styles.scss — SCSS over plain CSS, because your tree has 174 .scss files
+// against 45 .css. This is the sample that reaches Zed's `selector` and
+// `selector.pseudo` captures, and the only one where `property` appears
+// hundreds of times in a row.
+
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+
+/* ── Variables ──────────────────────────────────────────────────────────── */
+
+$chrome:        #1a1a1a;
+$surface:       #161616;
+$accent:        #5996db;
+$string:        #dec078;
+$operator:      #956ccc;
+$muted:         rgba(255, 255, 255, 0.38);
+
+$radius:        4px;
+$gutter:        8px;
+$font-stack:    "SF Mono", "Menlo", monospace;
+$ruler:         120ch;
+$ratio:         1.618;
+
+$breakpoints: (
+  "sm": 480px,
+  "md": 768px,
+  "lg": 1200px,
+  "xl": 1600px,
+);
+
+$levels: debug, info, warn, fatal;
+
+/* ── Functions and mixins ───────────────────────────────────────────────── */
+
+@function rem($px, $base: 16px) {
+  @return math.div($px, $base) * 1rem;
+}
+
+@function breakpoint($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error "unknown breakpoint: #{$name}";
+  }
+  @return map.get($breakpoints, $name);
+}
+
+@mixin above($name) {
+  @media (min-width: breakpoint($name)) {
+    @content;
+  }
+}
+
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+%focusable {
+  outline: 1px solid $accent;
+  outline-offset: 2px;
+}
+
+/* ── Custom properties ──────────────────────────────────────────────────── */
+
+:root {
+  --leo-chrome: #{$chrome};
+  --leo-surface: #{$surface};
+  --leo-accent: #{$accent};
+  --leo-gutter: #{$gutter};
+  --leo-radius: #{$radius};
+  --leo-shadow: 0 2px 8px rgb(0 0 0 / 45%);
+  color-scheme: dark;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  :root {
+    --leo-glass: rgba(26, 26, 26, 0.72);
+  }
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--leo-surface);
+  color: #d4d4d4;
+  font: #{rem(12.5px)} / #{$ratio} $font-stack;
+  max-inline-size: $ruler;
+}
+
+/* ── Nesting, parent selector, states ───────────────────────────────────── */
+
+.log-panel {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: calc(var(--leo-gutter) * 2);
+  border-radius: var(--leo-radius);
+  background: var(--leo-chrome);
+  box-shadow: var(--leo-shadow);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: rem(6px);
+    padding-inline: rem(10px);
+
+    h2 {
+      margin: 0;
+      font-size: rem(13px);
+      font-weight: 600;
+
+      small {
+        color: $muted;
+        font-weight: 400;
+      }
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: $gutter;
+    padding: math.div($gutter, 2) $gutter;
+    cursor: pointer;
+    transition: background-color 120ms ease-out;
+
+    &:hover,
+    &:focus-visible {
+      background: color.adjust($chrome, $lightness: 4%);
+    }
+
+    &:focus-visible {
+      @extend %focusable;
+    }
+
+    &:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    &:not(.is-selected):active {
+      transform: translateY(1px);
+    }
+
+    &.is-selected {
+      background: rgba(89, 150, 219, 0.18) !important;
+      border-inline-start: 2px solid $accent;
+    }
+
+    &::before {
+      content: "▸";
+      color: $operator;
+      flex: 0 0 auto;
+    }
+
+    &::after {
+      content: attr(data-index);
+      color: $muted;
+      margin-inline-start: auto;
+    }
+  }
+
+  &__message {
+    @include truncate(1);
+    flex: 1 1 auto;
+  }
+
+  > code {
+    color: $string;
+    font-variant-numeric: tabular-nums;
+  }
+
+  + .log-panel {
+    margin-block-start: $gutter * 2;
+  }
+
+  ~ footer {
+    color: $muted;
+  }
+}
+
+/* ── Attribute selectors ────────────────────────────────────────────────── */
+
+input[type="search"] {
+  background: var(--leo-surface);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: var(--leo-radius);
+  color: inherit;
+  padding: rem(3px) rem(6px);
+
+  &::placeholder {
+    color: $muted;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+a[href^="https://"]:not([href*="leomanrique"]) {
+  color: $accent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+[data-valid="true"] { color: inherit; }
+[data-valid]:not([data-valid="true"]) { color: #d1666f; }
+[hidden] { display: none !important; }
+
+/* ── Loops ──────────────────────────────────────────────────────────────── */
+
+@each $level in $levels {
+  .badge--#{$level} {
+    --badge-hue: var(--leo-#{$level}, #{$accent});
+    border: 1px solid var(--badge-hue);
+    color: var(--badge-hue);
+  }
+}
+
+@for $i from 1 through 4 {
+  .indent-#{$i} {
+    padding-inline-start: #{$i * $gutter}px;
+  }
+}
+
+/* ── Media and container queries ────────────────────────────────────────── */
+
+@include above("md") {
+  .log-panel {
+    grid-template-columns: minmax(200px, 1fr) 3fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@container (min-width: 40rem) {
+  .log-panel__row { gap: $gutter * 2; }
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  50%  { opacity: 1; }
+  to   { opacity: 0.4; }
+}
+
+.log-panel__spinner {
+  animation: pulse 1.2s ease-in-out infinite;
+}

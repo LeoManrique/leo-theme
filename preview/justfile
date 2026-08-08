@@ -1,0 +1,172 @@
+# justfile — 7 of these across CLI/semi-open-source, Desktop/leogit,
+# Desktop/git-projects-manager, rustlings-neetcode-250 and learning-by-building.
+#
+# No numeric prefix, same reason as Makefile and Dockerfile: just finds this
+# file by exact name.
+#
+# Worth having next to the Makefile rather than instead of it — the two look
+# alike and colour nothing alike. just has `{{ }}` interpolation, backtick
+# evaluation, typed string literals, attributes in brackets, and recipe
+# bodies indented with *spaces*. The Makefile's recipes need real tabs. Open
+# both with renderWhitespace on and the difference should be obvious.
+
+# ── Settings ──────────────────────────────────────────────────────────────
+
+set shell := ["bash", "-euo", "pipefail", "-c"]
+set windows-shell := ["sh", "-cu"]
+set dotenv-load := true
+set dotenv-filename := ".env.local"
+set positional-arguments := true
+set allow-duplicate-recipes := false
+set ignore-comments := false
+set export
+
+# ── Assignments ───────────────────────────────────────────────────────────
+
+name        := "preview"
+version     := "1.0.2"
+max_retries := "3"
+
+# Backtick evaluation, and the indented-backtick form.
+git_sha  := `git rev-parse --short HEAD 2>/dev/null || echo unknown`
+built_at := ```
+    date -u +%Y-%m-%dT%H:%M:%SZ
+```
+
+# Built-in functions.
+root      := justfile_directory()
+here      := invocation_directory()
+target    := arch() + "-" + os()
+upper     := uppercase(name)
+slug      := replace(lowercase(name), "_", "-")
+home_dir  := env_var("HOME")
+log_level := env_var_or_default("LOG_LEVEL", "info")
+
+# String literal forms — all four.
+double  := "escapes work: \t tab, \n newline, \" quote"
+single  := 'raw: \n stays literal'
+triple  := """
+    Indented triple-quoted string.
+    Escapes work here too: \u{2192}
+"""
+raw3    := '''
+    Raw triple-quoted: \n is two characters.
+'''
+
+# Conditional expression.
+profile := if env_var_or_default("CI", "") == "true" { "release" } else { "dev" }
+flags   := if profile == "release" { "--release --locked" } else { "" }
+
+export BUILD_REV := git_sha
+
+# ── Aliases ───────────────────────────────────────────────────────────────
+
+alias b := build
+alias c := check
+alias t := test
+
+# ── Recipes ───────────────────────────────────────────────────────────────
+
+# List available recipes
+default:
+    @just --list --unsorted
+
+# Print every resolved variable
+[group('info')]
+info:
+    @echo "name       {{ name }} v{{ version }}"
+    @echo "target     {{ target }}"
+    @echo "profile    {{ profile }} {{ flags }}"
+    @echo "sha        {{ git_sha }}"
+    @echo "built      {{ built_at }}"
+    @echo "root       {{ root }}"
+    @echo "invoked in {{ here }}"
+    @echo "upper      {{ upper }} / slug {{ slug }}"
+
+# Build the Go and Rust samples
+[group('build')]
+build: _ensure-tools
+    cd {{ root }}/go && go build -o /dev/null .
+    cd {{ root }}/rust && cargo build {{ flags }}
+
+# Verify every sample still parses
+[group('build')]
+check: && report
+    @echo "  CHECK   go"
+    cd {{ root }}/go && go vet ./...
+    @echo "  CHECK   rust"
+    cd {{ root }}/rust && cargo check --quiet
+    @echo "  CHECK   zig"
+    -zig ast-check {{ root }}/17-main.zig
+    @echo "  CHECK   shell"
+    bash -n {{ root }}/11-script.sh
+
+# Run tests for both modules
+[group('build')]
+test filter="":
+    cd {{ root }}/rust && cargo test {{ if filter != "" { filter } else { "" } }}
+
+# A recipe with a required arg, a defaulted arg, and a variadic tail
+[group('tools')]
+render format target_dir="./out" *extra:
+    @echo "format={{ format }} dir={{ target_dir }} extra={{ extra }}"
+
+# At least one argument required (+ instead of *)
+[group('tools')]
+open +files:
+    @for f in {{ files }}; do echo "would open $f"; done
+
+# Hidden from --list, called as a dependency above
+[private]
+_ensure-tools:
+    @command -v go >/dev/null || { echo "go not installed" >&2; exit 1; }
+    @command -v cargo >/dev/null || { echo "cargo not installed" >&2; exit 1; }
+
+# Runs after `check` because of the && dependency
+[private]
+report:
+    @echo "  all samples parse"
+
+# Prompts before running
+[confirm("Delete build output?")]
+[group('build')]
+clean:
+    rm -rf {{ root }}/build {{ root }}/rust/target {{ root }}/go/preview
+
+# Platform-gated recipes
+[macos]
+[group('info')]
+which-os:
+    @echo "macOS {{ target }}"
+
+[linux]
+[windows]
+[group('info')]
+which-os:
+    @echo "not macOS"
+
+# Shebang recipe — the whole body is one script, not line-by-line
+[group('tools')]
+stats:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd "{{ root }}"
+    total=0
+    for f in [0-9][0-9]-*; do
+        lines=$(wc -l < "$f" | tr -d ' ')
+        total=$(( total + lines ))
+        printf '  %-24s %5s lines\n' "$f" "$lines"
+    done
+    echo "  ${total} lines across $(ls [0-9][0-9]-* | wc -l | tr -d ' ') samples"
+
+# Ignore the exit status of a line with a leading -
+[group('tools')]
+try-lint:
+    -shellcheck {{ root }}/11-script.sh
+    @echo "continued regardless"
+
+# Do not cd into the justfile directory first
+[no-cd]
+[group('info')]
+where:
+    @pwd

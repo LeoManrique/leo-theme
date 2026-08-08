@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "leo-dark-parity",
+  "version": "1.0.2",
+  "description": "Strict JSON — no comments, no trailing commas. Every scalar type, deep nesting, and the escape sequences that trip up a grammar.",
+  "enabled": true,
+  "disabled": false,
+  "nothing": null,
+  "numbers": {
+    "integer": 42,
+    "negative": -17,
+    "zero": 0,
+    "float": 3.14159,
+    "negativeFloat": -0.5,
+    "exponent": 6.626e-34,
+    "positiveExponent": 1.5E+10,
+    "large": 9007199254740991
+  },
+  "strings": {
+    "plain": "nothing special",
+    "empty": "",
+    "withQuotes": "she said \"hello\" and left",
+    "withBackslash": "C:\\Users\\leo\\Dev",
+    "withSlash": "https:\/\/example.com",
+    "withNewline": "first line\nsecond line",
+    "withTab": "column\tcolumn",
+    "withCarriageReturn": "old mac\rstyle",
+    "withBackspace": "oops\b",
+    "withFormFeed": "page\fbreak",
+    "withUnicode": "arrow \u2192 and box \u2500 and emoji \ud83c\udf19",
+    "literalUnicode": "arrow → box ─ accents áéíóú ñ",
+    "looksLikeCode": "function() { return null; } // not a comment"
+  },
+  "arrays": {
+    "empty": [],
+    "flat": [1, 2, 3, 5, 8, 13],
+    "strings": ["debug", "info", "warn", "fatal"],
+    "mixed": [1, "two", 3.0, true, null],
+    "nested": [[1, 2], [3, 4], [[5, 6], [7, 8]]],
+    "objects": [
+      { "id": "rec_0a1b2c3d", "level": "info", "ok": true },
+      { "id": "rec_4e5f6a7b", "level": "warn", "ok": false }
+    ]
+  },
+  "deeplyNested": {
+    "level1": {
+      "level2": {
+        "level3": {
+          "level4": {
+            "level5": {
+              "value": "five levels down — check the indent guides and bracket pair colours here",
+              "siblings": [{ "a": [{ "b": [{ "c": 1 }] }] }]
+            }
+          }
+        }
+      }
+    }
+  },
+  "themeMapping": {
+    "editor.background": "editor.background",
+    "sideBar.background": "panel.background",
+    "tab.activeBackground": "tab.active_background",
+    "statusBar.background": "status_bar.background",
+    "titleBar.activeBackground": "title_bar.background",
+    "terminal.background": "terminal.background"
+  },
+  "palette": {
+    "chrome": "#1a1a1a",
+    "surface": "#161616",
+    "accent": "#5996db",
+    "string": "#dec078",
+    "operator": "#956ccc",
+    "translucent": "#5996db40"
+  },
+  "keysWithOddNames": {
+    "": "empty key",
+    " ": "single space key",
+    "with spaces": true,
+    "with-dashes": true,
+    "with.dots": true,
+    "with\"quote": true,
+    "1234": "numeric-looking key",
+    "🌙": "emoji key"
+  }
+}

@@ -1,0 +1,150 @@
+# 10-compose.yml — YAML, shaped like a real compose file.
+#
+# YAML is where anchors, aliases, merge keys and the two block-scalar forms
+# live. Nothing else in this corpus has them, and grammars disagree about
+# whether `&anchor` and `*alias` deserve their own colour.
+
+x-defaults: &defaults
+  restart: unless-stopped
+  init: true
+  networks: [backend]
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-healthcheck: &healthcheck
+  interval: 30s
+  timeout: 5s
+  retries: 3
+  start_period: 10s
+
+services:
+  api:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+      args:
+        GO_VERSION: "1.26"
+        BUILD_REV: ${GIT_SHA:-dev}
+    image: registry.example.com/preview/api:${TAG:-latest}
+    container_name: preview-api
+    ports:
+      - "8080:8080"
+      - "127.0.0.1:9090:9090"
+    environment:
+      LOG_LEVEL: info
+      DATABASE_URL: postgres://preview:${DB_PASSWORD:?required}@db:5432/preview?sslmode=disable
+      FEATURE_FLAGS: "modern-ui=false,semantic-tokens=true"
+      EMPTY_STRING: ""
+      NUMERIC_LOOKING: "0755"
+      BOOLEAN_LOOKING: "no"
+      REAL_BOOLEAN: true
+      REAL_NUMBER: 42
+    env_file:
+      - .env
+      - .env.local
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/healthz"]
+    deploy:
+      resources:
+        limits: { cpus: "1.5", memory: 512M }
+        reservations: { cpus: "0.25", memory: 128M }
+    command: >
+      /usr/local/bin/api
+      --addr=:8080
+      --metrics=:9090
+      --shutdown-grace=15s
+    volumes:
+      - ./config:/etc/preview:ro
+      - api-tmp:/tmp
+      - type: bind
+        source: ./certs
+        target: /etc/ssl/preview
+        read_only: true
+
+  db:
+    <<: *defaults
+    image: postgres:17-alpine
+    shm_size: 256mb
+    environment:
+      POSTGRES_USER: preview
+      POSTGRES_DB: preview
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?required}
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD-SHELL", "pg_isready -U preview -d preview"]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./12-queries.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+
+  cache:
+    <<: *defaults
+    image: redis:7-alpine
+    command: |
+      redis-server
+      --appendonly yes
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+    tmpfs:
+      - /data:size=64m
+
+  migrate:
+    <<: *defaults
+    image: registry.example.com/preview/api:${TAG:-latest}
+    profiles: ["tools"]
+    restart: "no"
+    entrypoint: ["/usr/local/bin/migrate", "up"]
+    depends_on: [db]
+
+volumes:
+  db-data:
+    driver: local
+  api-tmp: {}
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
+
+# ── Scalar forms, isolated ────────────────────────────────────────────────
+---
+folded_keeps_newlines_as_spaces: >
+  This paragraph is folded onto one line
+  when parsed, because of the `>` marker.
+
+literal_preserves_newlines: |
+  line one
+  line two
+      indented line three
+
+folded_strip: >-
+  no trailing newline
+
+literal_keep: |+
+  trailing newlines kept
+
+
+single_quoted: 'it''s escaped by doubling'
+double_quoted: "escaped by \\ backslash, with \n and \t"
+plain_scalar: no quotes needed here
+explicit_null: null
+tilde_null: ~
+inline_list: [a, b, c]
+inline_map: { key: value, other: 2 }
+date_looking: 2026-08-08
+time_looking: 14:47:50
+version_looking: "1.10"
+octal_looking: 0o755

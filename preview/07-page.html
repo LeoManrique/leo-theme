@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="leo-dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HTML sample for the Leo Dark parity corpus.">
+  <title>Leo Dark — HTML sample</title>
+
+  <link rel="stylesheet" href="./06-styles.scss">
+  <link rel="icon" href="../icon.png" type="image/png">
+
+  <!--
+    This is the second sample that reaches the `embedded` capture: a <style>
+    block and a <script> block inside markup. Both should highlight as CSS and
+    JS, not as plain text. If they do not, the grammar injection is missing —
+    that is an editor/extension gap, not a theme bug.
+  -->
+
+  <style>
+    :root {
+      --accent: #5996db;
+      --surface: #161616;
+    }
+
+    body > main {
+      background: var(--surface);
+      padding: 1rem 1.25rem;
+    }
+
+    .badge::after {
+      content: " ●";
+      color: var(--accent);
+    }
+
+    @media (max-width: 480px) {
+      body > main { padding: 0.5rem; }
+    }
+  </style>
+</head>
+
+<body class="preview" data-panel="editor">
+  <header id="masthead" role="banner">
+    <h1>Leo&nbsp;Dark <small>&mdash; HTML token sample</small></h1>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#surfaces" class="is-active">Surfaces</a></li>
+        <li><a href="#forms">Forms</a></li>
+        <li><a href="https://github.com/LeoManrique/leo-theme" rel="noopener noreferrer" target="_blank">Repo</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="surfaces">
+      <h2>Entities and escapes</h2>
+      <p>
+        Named entities: &amp; &lt; &gt; &quot; &apos; &copy; &rarr; &hellip;<br>
+        Numeric entities: &#8594; &#x2192; &#169;<br>
+        A literal angle bracket in text: 5 &lt; 10 &gt; 3.
+      </p>
+
+      <blockquote cite="https://code.visualstudio.com/api/references/theme-color">
+        <p>Colour keys not overridden by a theme fall back to the base <code>vs-dark</code> defaults.</p>
+      </blockquote>
+
+      <table>
+        <caption>Attribute forms</caption>
+        <thead>
+          <tr><th scope="col">Form</th><th scope="col">Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Double quoted</td><td><code>class="badge"</code></td></tr>
+          <tr><td>Single quoted</td><td><code>class='badge'</code></td></tr>
+          <tr><td>Unquoted</td><td><code>tabindex=0</code></td></tr>
+          <tr><td>Boolean</td><td><code>disabled</code></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="2">All four should colour identically as attributes.</td></tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section id="forms">
+      <h2>Forms</h2>
+      <form action="/search" method="get" autocomplete="off" novalidate>
+        <fieldset>
+          <legend>Filter records</legend>
+
+          <label for="q">Query</label>
+          <input id="q" name="q" type="search" placeholder="Filter&hellip;" spellcheck=false tabindex=0>
+
+          <label for="level">Level</label>
+          <select id="level" name="level" multiple size="3">
+            <option value="debug">Debug</option>
+            <option value="info" selected>Info</option>
+            <option value="warn">Warn</option>
+            <option value="fatal" disabled>Fatal</option>
+          </select>
+
+          <label><input type="checkbox" name="loud" checked> Loud only</label>
+          <label><input type="radio" name="sort" value="asc" checked> Ascending</label>
+          <label><input type="radio" name="sort" value="desc"> Descending</label>
+
+          <textarea name="notes" rows="3" cols="40" wrap="soft">Multi-line
+initial value, preserved verbatim.</textarea>
+
+          <button type="submit" class="badge" data-level="info">Apply</button>
+          <button type="reset" disabled>Reset</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <section>
+      <h2>Media and void elements</h2>
+      <img src="../icon.png" alt="Leo Dark icon" width="64" height="64" loading="lazy" decoding="async">
+      <hr>
+      <picture>
+        <source srcset="../icon.png" media="(min-width: 800px)" type="image/png">
+        <img src="../icon.png" alt="Fallback">
+      </picture>
+      <pre><code>preformatted   text
+  keeps   its    spacing</code></pre>
+    </section>
+
+    <details open>
+      <summary>Collapsible section</summary>
+      <p>Content inside a <code>&lt;details&gt;</code> element.</p>
+    </details>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Leonardo Manrique &middot; <a href="mailto:leonardomanrique43@gmail.com">Contact</a></p>
+  </footer>
+
+  <script type="module">
+    const rows = document.querySelectorAll(".log-panel__row");
+    const state = { selected: null, count: rows.length };
+
+    /** Highlights a row and reports it upward. */
+    function select(row, index = 0) {
+      state.selected?.classList.remove("is-selected");
+      row.classList.add("is-selected");
+      state.selected = row;
+
+      console.debug(`selected row ${index + 1} of ${state.count}`, {
+        id: row.dataset.index ?? "unknown",
+        valid: row.dataset.valid === "true",
+      });
+    }
+
+    rows.forEach((row, i) => {
+      row.addEventListener("click", () => select(row, i), { passive: true });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") state.selected?.classList.remove("is-selected");
+    });
+  </script>
+
+  <noscript>
+    <p>JavaScript is disabled — the interactive parts of this sample will not run.</p>
+  </noscript>
+</body>
+</html>

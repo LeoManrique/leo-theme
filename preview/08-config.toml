@@ -1,0 +1,109 @@
+# 08-config.toml — 1440 .toml files in your tree, nearly all Cargo manifests.
+# Shaped like a real Cargo.toml but stretched to cover every TOML value type,
+# since TOML is the only key/value grammar here that is neither JSON nor YAML.
+
+[package]
+name = "preview"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+authors = ["Leonardo Manrique <leonardomanrique43@gmail.com>"]
+description = """
+Multi-line basic string.
+Line breaks are preserved, and \t escapes are interpreted.
+"""
+readme = 'literal string: no \escapes\ processed here'
+homepage = "https://github.com/LeoManrique/leo-theme"
+keywords = ["theme", "dark", "parity"]
+categories = ["development-tools"]
+license = "MIT"
+publish = false
+
+# Dotted keys.
+package.metadata.leo.corpus = true
+package.metadata.leo.languages = 20
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"], default-features = false }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+anyhow = "1"
+
+[dependencies.clap]
+version = "4.5"
+features = ["derive", "env"]
+optional = true
+
+[dev-dependencies]
+pretty_assertions = "1.4"
+
+[features]
+default = ["cli"]
+cli = ["dep:clap"]
+extra = []
+
+# Array of tables.
+[[bin]]
+name = "preview"
+path = "src/main.rs"
+
+[[bin]]
+name = "preview-check"
+path = "src/bin/check.rs"
+required-features = ["cli"]
+
+[[example]]
+name = "minimal"
+doc-scrape-examples = true
+
+[profile.dev]
+opt-level = 0
+debug = true
+incremental = true
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+# ── Scalar types, all of them ─────────────────────────────────────────────
+
+[types]
+bare_string     = "quoted"
+literal_string  = 'C:\Users\leo\no-escape'
+integer         = 42
+negative        = -17
+underscored     = 1_000_000
+hexadecimal     = 0xDEADBEEF
+octal           = 0o755
+binary          = 0b1010_1101
+float           = 3.14159
+exponent        = 6.626e-34
+negative_exp    = -1.5E+3
+infinity        = inf
+negative_inf    = -inf
+not_a_number    = nan
+boolean_true    = true
+boolean_false   = false
+
+offset_datetime = 1979-05-27T07:32:00-08:00
+local_datetime  = 1979-05-27T07:32:00.999999
+local_date      = 2026-08-08
+local_time      = 14:47:50.5
+
+empty_array     = []
+flat_array      = [1, 2, 3]
+mixed_array     = ["strings", 'literals', 4, 5.0, true]
+nested_array    = [[1, 2], [3, 4], []]
+multiline_array = [
+  "trailing commas allowed",
+  "and comments too",  # like this one
+]
+inline_table    = { r = 0x16, g = 0x16, b = 0x16 }
+
+["quoted.key.with.dots"]
+enabled = true
+
+[ws.members]
+"crates/*" = { inherit = true }

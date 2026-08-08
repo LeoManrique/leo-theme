@@ -1,0 +1,39 @@
+No grammar at all. Everything here must render in editor.foreground and nothing else.
+
+This is the baseline. If a word in this file picks up a color, a TextMate rule is
+leaking through a scope it should not match. If the text looks dim or washed out,
+editor.foreground itself is wrong and every other sample in this folder is lying to you.
+
+Things that look like tokens but are not:
+	function const class return null true false import
+	#define SELECT * FROM users; -- not a comment here
+	{ "key": "value" }  <tag attr="x"/>  $VAR  0xDEADBEEF  3.14e-2
+	// this is not a comment either, and neither is /* this */
+
+The line below runs past column 120 so the ruler shows up against plain text — check that editorRuler.foreground is visible but not loud enough to compete with the words.
+
+The line above ends at 227 characters.
+
+Whitespace checks (turn on renderWhitespace to compare editorWhitespace.foreground):
+	one leading tab, then a tab in the	middle
+    four spaces, then two trailing spaces
+        eight spaces
+
+Unicode that must stay legible at your 12.5px SF Mono:
+	arrows      → ← ↑ ↓ ⇒ ⇄
+	box drawing ─ │ ┌ ┐ └ ┘ ├ ┤ ═ ║
+	blocks      ░ ▒ ▓ █ ▁ ▄ ▀
+	marks       ✓ ✗ ● ○ ★ ☆ ⚠ ⏎ …
+	accents     áéíóú ñ ü ¿ ¡ ß ẞ
+
+Long unbroken token, for word wrap at column 120:
+aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllll
+
+Selection test: highlight this paragraph, then highlight it again while the editor is
+unfocused. editor.selectionBackground and editor.inactiveSelectionBackground must both
+keep this text readable. Then double-click the word BASELINE to check
+editor.selectionHighlightBackground on the other occurrences: BASELINE, BASELINE.
+
+Find test: press Cmd+F and search for "the" — editor.findMatchBackground on the current
+hit, editor.findMatchHighlightBackground on the rest, and both must stay distinct from
+the selection colors above.
