@@ -138,12 +138,12 @@
     { "scope": ["entity.other.attribute-name.class.css", "source.css entity.other.attribute-name.class", "entity.other.attribute-name.id.css", "entity.other.attribute-name.parent-selector.css", "entity.other.attribute-name.parent.less", "source.css entity.other.attribute-name.pseudo-class", "entity.other.attribute-name.pseudo-element.css", "source.css.less entity.other.attribute-name.id", "entity.other.attribute-name.scss"], "settings": {"foreground": "#d7ba7d"} },
     { "scope": "invalid", "settings": {"foreground": "#f44747"} },
     { "scope": "markup.underline", "settings": {"fontStyle": "underline"} },
-    { "scope": "markup.bold", "settings": {"fontStyle": "bold", "foreground": "#5996db"} },
+    { "scope": "markup.bold", "settings": {"fontStyle": "bold", "foreground": "#c586c0"} },
     { "scope": "markup.heading", "settings": {"fontStyle": "bold", "foreground": "#5996db"} },
-    { "scope": "markup.italic", "settings": {"fontStyle": "italic", "foreground": "#C586C0"} },
+    { "scope": "markup.italic", "settings": {"fontStyle": "italic", "foreground": "#c586c0"} },
     { "scope": "markup.strikethrough", "settings": {"fontStyle": "strikethrough"} },
     { "scope": "markup.inserted", "settings": {"foreground": "#b5cea8"} },
-    { "scope": "markup.deleted", "settings": {"foreground": "#ce9178"} },
+    { "scope": "markup.deleted", "settings": {"foreground": "#d07e70"} },
     { "scope": "markup.changed", "settings": {"foreground": "#5996db"} },
     { "scope": "punctuation.definition.quote.begin.markdown", "settings": {"foreground": "#6A9955"} },
     { "scope": "punctuation.definition.list.begin.markdown", "settings": {"foreground": "#6796e6"} },
@@ -176,20 +176,34 @@
     { "name": "this.self", "scope": "variable.language", "settings": {"foreground": "#5996db"} },
     // ── LEO · syntax overrides ──
     { "name": "Functions", "scope": ["entity.name.function"], "settings": {"foreground": "#d4d4d4"} },
-    { "name": "Support functions (builtins: print, len, ...)", "scope": ["support.function"], "settings": {"foreground": "#d5b466"} },
+    { "name": "Builtin / library functions (print, len, ...) — language vocabulary, so same family as types", "scope": ["support.function"], "settings": {"foreground": "#9cdcfe"} },
     { "name": "Strings", "scope": ["string", "punctuation.definition.string"], "settings": {"foreground": "#dec078"} },
-    // ── LEO · Markdown — all prose elements render white ──
+    // ── LEO · Markdown — prose neutral, headings/markers blue, emphasis soft pink ──
     { "name": "Markdown inline code", "scope": ["markup.inline.raw", "markup.inline.raw.string.markdown", "punctuation.definition.raw.markdown"], "settings": {"foreground": "#dec078"} },
     { "name": "Markdown link / table punctuation (bold kept)", "scope": ["punctuation.definition.string.begin.markdown", "punctuation.definition.string.end.markdown", "punctuation.definition.link.title.begin.markdown", "punctuation.definition.link.title.end.markdown", "punctuation.definition.link.begin.markdown", "punctuation.definition.link.end.markdown", "punctuation.definition.metadata.markdown", "punctuation.definition.constant.begin.markdown", "punctuation.definition.constant.end.markdown", "punctuation.separator.table.markdown", "punctuation.definition.table.markdown"], "settings": {"foreground": "#d4d4d4", "fontStyle": "bold"} },
-    { "name": "Markdown link URL", "scope": ["markup.underline.link.markdown", "markup.underline.link.image.markdown", "markup.underline.link", "string.other.link.dest.markdown", "string.other.link.title.markdown"], "settings": {"foreground": "#d4d4d4"} },
-    { "name": "Markdown headings / bold / list markers", "scope": ["markup.heading", "markup.heading.markdown", "entity.name.section.markdown", "punctuation.definition.heading.markdown", "markup.bold", "markup.bold.markdown", "punctuation.definition.bold.markdown", "punctuation.definition.list.begin.markdown", "markup.list.numbered.markdown"], "settings": {"foreground": "#d4d4d4"} },
-    { "name": "Markdown italic / quote (style kept)", "scope": ["markup.italic", "markup.italic.markdown", "punctuation.definition.italic.markdown", "markup.quote", "markup.quote.markdown", "punctuation.definition.quote.begin.markdown"], "settings": {"foreground": "#d4d4d4"} },
-    { "name": "Markdown list / quote / table markers → distinct purple", "scope": ["punctuation.definition.list.begin.markdown", "punctuation.definition.quote.begin.markdown", "punctuation.separator.table.markdown", "punctuation.definition.table.markdown", "punctuation.definition.constant.markdown"], "settings": {"foreground": "#5996db"} },
+    { "name": "Markdown link — label, URL and title all neutral", "scope": ["markup.underline.link.markdown", "markup.underline.link.image.markdown", "markup.underline.link", "string.other.link.dest.markdown", "string.other.link.description.markdown", "string.other.link.title.markdown"], "settings": {"foreground": "#d4d4d4"} },
+    { "name": "Markdown prose blocks → neutral", "scope": ["markup.quote", "markup.quote.markdown", "markup.list.numbered.markdown"], "settings": {"foreground": "#d4d4d4"} },
+    { "name": "Markdown bold / italic → soft pink (face kept)", "scope": ["markup.bold.markdown", "punctuation.definition.bold.markdown", "markup.italic.markdown", "punctuation.definition.italic.markdown"], "settings": {"foreground": "#c586c0"} },
     { "name": "Markdown headings → blue", "scope": ["markup.heading", "markup.heading.markdown", "entity.name.section.markdown", "punctuation.definition.heading.markdown"], "settings": {"foreground": "#5996db"} },
+    { "name": "Markdown list / quote / table markers → blue", "scope": ["punctuation.definition.list.begin.markdown", "punctuation.definition.quote.begin.markdown", "punctuation.separator.table.markdown", "punctuation.definition.table.markdown", "punctuation.definition.constant.markdown"], "settings": {"foreground": "#5996db"} },
     { "name": "JSON keys → teal", "scope": ["support.type.property-name.json", "meta.structure.dictionary.key.json string"], "settings": {"foreground": "#5996db"} },
-    { "name": "Keywords → bold", "scope": ["keyword", "keyword.control", "storage", "storage.type", "storage.modifier", "variable.language", "constant.language", "entity.name.tag"], "settings": {"foreground": "#5996db", "fontStyle": "bold"} },
-    { "name": "Operators & symbols  * = : -> .", "scope": ["keyword.operator", "punctuation.separator", "punctuation.terminator", "punctuation.accessor", "storage.modifier.pointer"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
-    { "name": "Brackets / braces / parens — bolder", "scope": ["punctuation.section.parens.begin", "punctuation.section.parens.end", "punctuation.section.parens", "punctuation.definition.begin.bracket", "punctuation.definition.end.bracket", "punctuation.definition.bracket", "punctuation.brackets", "punctuation.section.brackets", "punctuation.section.braces", "punctuation.section.block.begin.bracket.curly", "punctuation.section.block.end.bracket.curly", "punctuation.section.group.begin.bracket.round", "punctuation.section.group.end.bracket.round", "meta.brace.round", "meta.brace.square", "meta.brace.curly", "punctuation.definition.imports.begin.bracket.round", "punctuation.definition.imports.end.bracket.round", "punctuation.definition.parameters.begin.bracket.round", "punctuation.definition.parameters.end.bracket.round"], "settings": {"fontStyle": "bold"} },
+    { "name": "Keywords → bold. Bold means keyword and nothing else", "scope": ["keyword", "keyword.control", "storage", "storage.type", "storage.modifier", "entity.name.tag"], "settings": {"foreground": "#5996db", "fontStyle": "bold"} },
+    // fontStyle has to be cleared, not omitted: keyword.operator is a child of keyword and would inherit its bold.
+    { "name": "Operators — purple, not bold. Brackets get their colour from bracket-pair colourisation", "scope": ["keyword.operator", "storage.modifier.pointer"], "settings": {"foreground": "#956ccc", "fontStyle": ""} },
+    // ── LEO · Structure — types, packages and builtins light blue; everything a program names itself stays neutral ──
+    { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#9cdcfe"} },
+    { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#9cdcfe", "fontStyle": ""} },
+    { "name": "Packages / namespaces — same family as types: not a value", "scope": ["entity.name.namespace", "entity.name.type.namespace", "entity.name.type.module", "entity.name.type.package", "entity.name.scope-resolution", "storage.modifier.package", "support.other.namespace"], "settings": {"foreground": "#9cdcfe"} },
+    // Struct fields, object properties and declared constants stay neutral on purpose:
+    // the declaration already reads as one, and colouring it says nothing the code doesn't.
+    { "name": "Labels", "scope": ["variable.other.label", "entity.name.label"], "settings": {"foreground": "#9cdcfe"} },
+    { "name": "Escape sequences inside strings", "scope": ["constant.character.escape"], "settings": {"foreground": "#d5b466"} },
+    // Same inheritance trap as keyword.operator: keyword.other.unit is a child of keyword.
+    { "name": "Number prefixes and units (0x, 0b, px) — part of the number, never bold", "scope": ["keyword.other.unit"], "settings": {"foreground": "#b5cea8", "fontStyle": ""} },
+    { "name": "printf placeholders — Zed's grammars cannot separate these from the string", "scope": ["constant.other.placeholder"], "settings": {"foreground": "#dec078"} },
+    // .builtin is load-bearing: Go scopes *every* call entity.name.function.support, only the 16
+    // universe builtins get the extra segment. Without it this paints every call site.
+    { "name": "Builtin calls — append, len, make, new, panic, ...", "scope": ["entity.name.function.support.builtin"], "settings": {"foreground": "#9cdcfe"} },
     // ── LEO · Shell / bash (terminal-like) ──
     { "name": "Shell variables ($HOME, $VAR)", "scope": ["variable.other.normal.shell", "variable.other.special.shell", "variable.parameter.positional.shell", "punctuation.definition.variable.shell"], "settings": {"foreground": "#56b6c2"} },
     { "name": "Shell builtins / commands (cd, echo, ...)", "scope": ["support.function.builtin.shell", "entity.name.function.shell", "entity.name.command.shell", "meta.function-call.command.shell"], "settings": {"foreground": "#D4D4D4"} },
@@ -198,12 +212,23 @@
   ],
 
   "semanticHighlighting": true,
+  // A semantic token only wins over the TextMate scope if the theme styles it,
+  // so every role that a language server reports has to be repeated here.
   "semanticTokenColors": {
     // ── Inherited from Visual Studio Dark ──
     "newOperator": "#d4d4d4",
-    "stringLiteral": "#ce9178",
+    "stringLiteral": "#dec078",
     "customLiteral": "#D4D4D4",
     "numberLiteral": "#b5cea8",
+    // ── LEO · Structure — mirrors the tokenColors block above ──
+    "namespace": "#9cdcfe",
+    "type": {"foreground": "#9cdcfe", "bold": false},
+    "class": "#9cdcfe",
+    "struct": "#9cdcfe",
+    "interface": "#9cdcfe",
+    "enum": "#9cdcfe",
+    "typeParameter": "#9cdcfe",
+    "enumMember": "#b5cea8",
     // ── LEO · strike through deprecated symbols ──
     "*.deprecated": {"strikethrough": true}
   }

@@ -10,27 +10,53 @@ The folder is listed in `.vscodeignore`, so none of it ships in the `.vsix`.
 
 ### Both editors must be running the current theme
 
-`~/.config/zed/themes/leo-dark.json` is a **copy**, not a symlink, so it goes
-stale every time `themes/leo-dark.json` changes. Check before every pass:
+Comparing against a published snapshot is the fastest way to waste a pass.
+`install-dev.py` links both editors at the working tree:
 
 ```bash
-diff ~/.config/zed/themes/leo-dark.json themes/leo-dark.json
+python3 install-dev.py --status   # report, change nothing
+python3 install-dev.py            # link both
 ```
 
-Replace the copy with a link once and the problem goes away:
+Pick **Leo Dark (Dev)** in VS Code and **Leo Dark** in Zed, then reload. The dev
+extension is deliberately separate from the marketplace install so an
+auto-update cannot quietly restore the published colors underneath you.
 
-```bash
-ln -sfn "$PWD/themes/leo-dark.json" ~/.config/zed/themes/leo-dark.json
+Zed's `theme_overrides` in `~/.config/zed/settings.json` wins over the theme
+file. Check it is not scoped to Leo Dark before blaming a colour.
+
+### Match the typography, or don't trust your eyes
+
+The two editors are currently on different fonts, sizes and weights:
+
+| | VS Code | Zed |
+|:--|:--|:--|
+| Family | `SF Mono` | default (Zed Plex Mono) |
+| Size | 12.5 | 13.5 |
+| Weight | 400 | 450 |
+| Ligatures | off | on |
+
+Zed Plex Mono ligates, so `---`, `___`, `=>` and `!=` render as single glyphs
+there and as literal characters in VS Code. That is typography, not colour —
+but it reads as a difference. Set `buffer_font_family` and `buffer_font_size`
+in Zed to match before a pass, or discount anything that is purely shape.
+
+### Match the inlay hints, or half the diff is not the theme
+
+VS Code ships them on and Zed ships them off, so the same Go file shows parameter
+names, type hints and constant values in one editor and not the other. That is a
+large visual difference and none of it is colour. In `~/.config/zed/settings.json`:
+
+```json
+"inlay_hints": { "enabled": true },
+"lsp": { "gopls": { "initialization_options": { "hints": {
+  "assignVariableTypes": true, "compositeLiteralFields": true,
+  "constantValues": true, "functionTypeParameters": true,
+  "parameterNames": true, "rangeVariableTypes": true
+} } } }
 ```
 
-On the VS Code side, `leoshell.leo-theme` is installed from the marketplace,
-which is also a snapshot. To test unreleased edits, link the repo instead:
-
-```bash
-ln -sfn "$PWD" ~/.vscode/extensions/leo-theme
-```
-
-Reload both editors afterwards.
+The hint colour itself already agrees at `#959595`.
 
 ### Grammars
 
@@ -161,6 +187,29 @@ the grammar injection, not the theme.
   `[private]`. Compare them side by side.
 - **`08-config.toml` and `rust/Cargo.toml` overlap.** The manifest exists so
   rust-analyzer works; the numbered file is the actual TOML token sample.
+- **Zed cannot draw strikethrough or underline.** Schema `v0.2.0` allows only
+  `color`, `background_color`, `font_style` and `font_weight` on a syntax style.
+  So `~~strikethrough~~` in `01-markdown.md`, the deprecated symbol in
+  `03-broken.ts`, and the underline VS Code puts under every detected link are
+  all permanently VS Code-only. Not a theme bug, not fixable.
+- **`align` is red in VS Code, blue in Zed** (`01-markdown.md`, Raw HTML section).
+  VS Code's HTML grammar hard-codes `align|bgcolor|border` as
+  `invalid.deprecated.entity.other.attribute-name.html` — they are deprecated
+  presentational attributes. `href` next to it stays
+  `entity.other.attribute-name.html`. VS Code is right; Zed's tree-sitter grammar
+  has no deprecation concept. Not a theme bug.
+- **A package qualifier is light blue in some places and neutral in others.**
+  `context` is light blue in `ctx context.Context` and neutral in
+  `context.DeadlineExceeded`, and `fmt`, `errors`, `time` are neutral throughout.
+  Both editors do this, identically: a qualified *type* is a distinct parse node,
+  a selector *expression* is not, and neither parser can tell `time` from a local
+  variable there. `gopls.ui.semanticTokens` is off by default, so VS Code has no
+  more information than Zed. Parser limit, not a theme bug — full reasoning in
+  [TECHNICAL.md](../TECHNICAL.md#a-package-is-only-a-package-where-the-parser-can-prove-it).
+- **Setext heading text is plain in VS Code.** Its markdown grammar scopes only
+  the `===` / `---` underline as a heading, never the line above it. Zed's
+  tree-sitter grammar captures the whole node, so the text is blue there.
+  Grammar difference, nothing the theme can reach.
 
 ## 5. Re-verify the samples still parse
 

@@ -142,6 +142,11 @@ ___
 
 ## Raw HTML
 
+`align` below is deprecated HTML, so VS Code scopes it `invalid.deprecated` and
+paints it red while `href` stays blue. Zed's grammar has no deprecation concept
+and colours both alike. Kept on purpose — it is the only sample that reaches
+`invalid.deprecated`.
+
 <div align="center">
   <strong>Inline HTML block</strong> — tests the <code>embedded</code> capture.
   <br />
