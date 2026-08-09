@@ -56,7 +56,7 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 |:--|:--|
 | `#5996db` blue **bold** | keyword — bold means keyword and nothing else |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
-| `#9cdcfe` light blue | type, package, builtin call, attribute, label |
+| `#9cdcfe` light blue | type, package, builtin call, attribute, label, markdown emphasis |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |

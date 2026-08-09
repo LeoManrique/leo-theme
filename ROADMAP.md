@@ -41,9 +41,10 @@ only the verdict belongs here.
 
 Fixes from the `01-markdown.md` pass:
 
-- Markdown **bold and italic are soft pink `#c586c0`** in both editors, keeping the
-  bold/italic face. Chosen to read as emphasis without colliding with the blue of
-  headings. Previously VS Code rendered both neutral and Zed rendered bold blue.
+- Markdown **bold and italic are light blue `#9cdcfe`** in both editors, keeping the
+  bold/italic face, delimiters included. Same hue as types and packages in code:
+  emphasis names something, and it stays clear of the keyword blue the headings
+  use. Previously VS Code rendered both neutral and Zed rendered bold blue.
 - Markdown link labels are neutral in both. VS Code's link rule covered
   `string.other.link.dest` and `.title` but not `.description`, so `[text]` fell
   through to the generic string rule and came out gold.
