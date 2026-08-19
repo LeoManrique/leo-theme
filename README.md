@@ -9,7 +9,8 @@ A calm dark theme for VS Code. Built to highlight important stuff in code withou
   so the working area stands out without harsh contrast.
 - **Muted blue accent** (`#5996db`) in place of the default bright blue — used for
   selection, focus, keywords, and badges.
-- **Warm strings** (`#dec078`) and a **calm purple** (`#956ccc`) for operators and brackets.
+- **Warm strings** (`#dec078`) and a **bold calm purple** (`#956ccc`) for punctuation:
+  operators, brackets, and `,` `;` `.` `:`, so the structure of a line reads at a glance.
 - **Tuned across languages** — JSON, Markdown, shell/bash, Python, JS/TS, CSS, and more.
 - **Semantic highlighting** enabled, with strikethrough for deprecated symbols.
 

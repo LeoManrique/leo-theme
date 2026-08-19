@@ -186,10 +186,18 @@
     { "name": "Markdown bold / italic → light blue (face kept)", "scope": ["markup.bold.markdown", "punctuation.definition.bold.markdown", "markup.italic.markdown", "punctuation.definition.italic.markdown"], "settings": {"foreground": "#9cdcfe"} },
     { "name": "Markdown headings → blue", "scope": ["markup.heading", "markup.heading.markdown", "entity.name.section.markdown", "punctuation.definition.heading.markdown"], "settings": {"foreground": "#5996db"} },
     { "name": "Markdown list / quote / table markers → blue", "scope": ["punctuation.definition.list.begin.markdown", "punctuation.definition.quote.begin.markdown", "punctuation.separator.table.markdown", "punctuation.definition.table.markdown", "punctuation.definition.constant.markdown"], "settings": {"foreground": "#5996db"} },
+    { "name": "Markdown reference-definition colon  [id]: url  stays with the prose, out of the code punctuation rules", "scope": ["punctuation.separator.key-value.markdown"], "settings": {"foreground": "#d4d4d4", "fontStyle": ""} },
     { "name": "JSON keys → teal", "scope": ["support.type.property-name.json", "meta.structure.dictionary.key.json string"], "settings": {"foreground": "#5996db"} },
-    { "name": "Keywords → bold. Bold means keyword and nothing else", "scope": ["keyword", "keyword.control", "storage", "storage.type", "storage.modifier", "entity.name.tag"], "settings": {"foreground": "#5996db", "fontStyle": "bold"} },
-    // fontStyle has to be cleared, not omitted: keyword.operator is a child of keyword and would inherit its bold.
-    { "name": "Operators — purple, not bold. Brackets get their colour from bracket-pair colourisation", "scope": ["keyword.operator", "storage.modifier.pointer"], "settings": {"foreground": "#956ccc", "fontStyle": ""} },
+    { "name": "Keywords → blue bold", "scope": ["keyword", "keyword.control", "storage", "storage.type", "storage.modifier", "entity.name.tag"], "settings": {"foreground": "#5996db", "fontStyle": "bold"} },
+    // ── LEO · Punctuation — operators, brackets and , ; . : are purple bold. Word operators (new, typeof, sizeof, and/not) keep the keyword blue from the rules above and pick up the bold here ──
+    { "name": "Operators  + = := -> :: ? ...  and pointer stars", "scope": ["keyword.operator", "storage.modifier.pointer", "punctuation.vararg-ellipses"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
+    { "name": "Separators and terminators  , ; . :", "scope": ["punctuation.separator", "punctuation.terminator", "punctuation.accessor", "punctuation.access", "punctuation.delimiter", "punctuation.other.comma", "punctuation.other.period", "punctuation.other.colon", "punctuation.comma", "punctuation.semi"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
+    // Several grammars scope digit separators, decimal points and exponent signs as punctuation or operators; they belong to the number.
+    { "name": "Parts of a number literal stay pale green", "scope": ["punctuation.separator.constant.numeric", "punctuation.separator.dot.decimal", "punctuation.separator.decimal", "keyword.operator.plus.exponent", "keyword.operator.minus.exponent", "keyword.operator.exponent"], "settings": {"foreground": "#b5cea8", "fontStyle": ""} },
+    // Bracket-pair colourisation paints the same purple over these when it is on; the rules carry the bold, and the colour for when it is off.
+    // Grammars scope brackets a dozen ways, so: one generic list, one per-grammar list. Selectors are prefixes — punctuation.definition.bracket also reaches jsdoc's {Type} braces, on purpose.
+    { "name": "Brackets ( ) [ ] { } < > — generic scopes (section.function / section.class also cover Python's block colon)", "scope": ["punctuation.section.parens", "punctuation.section.brackets", "punctuation.section.braces", "punctuation.section.block", "punctuation.section.group", "punctuation.section.arguments", "punctuation.section.parameters", "punctuation.section.function", "punctuation.section.class", "punctuation.section.scope", "punctuation.section.array", "punctuation.section.begin.bracket", "punctuation.section.end.bracket", "punctuation.section.angle-brackets", "punctuation.definition.begin.bracket", "punctuation.definition.end.bracket", "punctuation.definition.bracket", "punctuation.definition.parameters", "punctuation.definition.arguments", "punctuation.definition.typeparameters", "punctuation.definition.array", "punctuation.definition.dictionary", "punctuation.brackets", "punctuation.bracket", "meta.brace.round", "meta.brace.square", "meta.brace.curly", "meta.brace.angle"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
+    { "name": "Brackets — per-grammar scopes: TS/JS blocks and destructuring, Go imports, Python, Java sections, CSS/SCSS, Swift, shell, YAML flow, TOML tables", "scope": ["punctuation.definition.block.ts", "punctuation.definition.block.tsx", "punctuation.definition.block.js", "punctuation.definition.binding-pattern", "punctuation.definition.imports", "punctuation.parenthesis.begin.python", "punctuation.parenthesis.end.python", "punctuation.definition.list.begin.python", "punctuation.definition.list.end.python", "punctuation.definition.dict", "punctuation.definition.inheritance", "punctuation.section.method", "punctuation.section.try", "punctuation.section.catch", "punctuation.section.finally", "punctuation.section.enum", "punctuation.section.inner-class", "punctuation.section.module", "punctuation.section.array-initializer", "punctuation.definition.annotation-arguments", "punctuation.section.property-list", "punctuation.section.media", "punctuation.section.keyframes", "punctuation.section.supports", "punctuation.section.document", "punctuation.definition.media-query", "punctuation.definition.map", "punctuation.definition.condition", "punctuation.definition.pseudo-class", "punctuation.definition.attribute-selector", "punctuation.definition.entity.begin.bracket.square.css", "punctuation.definition.entity.end.bracket.square.css", "punctuation.section.collection-type", "punctuation.definition.type.begin.swift", "punctuation.definition.type.end.swift", "punctuation.definition.subshell", "punctuation.definition.logical-expression", "punctuation.section.arithmetic", "punctuation.section.parenthese", "punctuation.definition.sequence", "punctuation.definition.mapping", "punctuation.definition.table.toml", "punctuation.definition.table.inline.toml"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
     // ── LEO · Structure — types, packages and builtins light blue; everything a program names itself stays neutral ──
     { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#9cdcfe"} },
     { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#9cdcfe", "fontStyle": ""} },
@@ -198,7 +206,7 @@
     // the declaration already reads as one, and colouring it says nothing the code doesn't.
     { "name": "Labels", "scope": ["variable.other.label", "entity.name.label"], "settings": {"foreground": "#9cdcfe"} },
     { "name": "Escape sequences inside strings", "scope": ["constant.character.escape"], "settings": {"foreground": "#d5b466"} },
-    // Same inheritance trap as keyword.operator: keyword.other.unit is a child of keyword.
+    // fontStyle has to be cleared, not omitted: keyword.other.unit is a child of keyword and would inherit its bold.
     { "name": "Number prefixes and units (0x, 0b, px) — part of the number, never bold", "scope": ["keyword.other.unit"], "settings": {"foreground": "#b5cea8", "fontStyle": ""} },
     { "name": "printf placeholders — Zed's grammars cannot separate these from the string", "scope": ["constant.other.placeholder"], "settings": {"foreground": "#dec078"} },
     // .builtin is load-bearing: Go scopes *every* call entity.name.function.support, only the 16
@@ -208,7 +216,7 @@
     { "name": "Shell variables ($HOME, $VAR)", "scope": ["variable.other.normal.shell", "variable.other.special.shell", "variable.parameter.positional.shell", "punctuation.definition.variable.shell"], "settings": {"foreground": "#56b6c2"} },
     { "name": "Shell builtins / commands (cd, echo, ...)", "scope": ["support.function.builtin.shell", "entity.name.function.shell", "entity.name.command.shell", "meta.function-call.command.shell"], "settings": {"foreground": "#D4D4D4"} },
     { "name": "Shell keywords (if/for/then/do)", "scope": ["keyword.control.shell"], "settings": {"foreground": "#5996db"} },
-    { "name": "Shell operators / pipes / redirects", "scope": ["keyword.operator.shell", "keyword.operator.logical.shell", "keyword.operator.pipe.shell", "punctuation.section.array.shell"], "settings": {"foreground": "#956ccc"} }
+    { "name": "Shell operators / pipes / redirects", "scope": ["keyword.operator.shell", "keyword.operator.logical.shell", "keyword.operator.pipe.shell", "punctuation.section.array.shell"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} }
   ],
 
   "semanticHighlighting": true,
@@ -229,6 +237,7 @@
     "enum": "#9cdcfe",
     "typeParameter": "#9cdcfe",
     "enumMember": "#b5cea8",
+    "operator": {"foreground": "#956ccc", "bold": true},
     // ── LEO · strike through deprecated symbols ──
     "*.deprecated": {"strikethrough": true}
   }

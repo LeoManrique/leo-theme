@@ -54,22 +54,31 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 
 | Hue | Means |
 |:--|:--|
-| `#5996db` blue **bold** | keyword — bold means keyword and nothing else |
+| `#5996db` blue **bold** | keyword, including the word-shaped operators `new` `typeof` `sizeof` `and` `not` |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
 | `#9cdcfe` light blue | type, package, builtin call, attribute, label, markdown emphasis |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |
-| `#956ccc` purple | operator and bracket — never bold |
+| `#956ccc` purple **bold** | punctuation: operator, bracket, and `,` `;` `.` `:` |
 | `#d4d4d4` neutral | everything a program names for itself |
 
 That last row is the largest by design, and it is what makes the rest read as
 highlights. It covers variables, parameters, constants, functions, methods,
-struct fields and property accesses, plus `.` `,` `:`. A declaration already
-looks like a declaration, a call already has its parentheses, and a comma does
-not look like a letter — colouring any of them repeats what the code says. What
-earns a hue is the part you cannot infer from the shape of the line: which words
-belong to the language, which name a type or a package, and which are literals.
+struct fields and property accesses. A declaration already looks like a
+declaration and a call already has its parentheses — colouring either repeats
+what the code says. What earns a hue is the part you cannot infer from the shape
+of the line: which words belong to the language, which name a type or a package,
+and which are literals.
+
+Punctuation is the one exception to "neutral by default", and it is a weight
+decision as much as a colour one: bold purple makes the structure of a line —
+where a call opens, where a statement ends, where a chain steps — visible in the
+periphery without having to read it, and it keeps the names in between quiet by
+contrast. Bold therefore means one of two things: blue-bold is a keyword,
+purple-bold is punctuation. Digit separators, decimal points and exponent signs
+inside a number literal are excluded on purpose; grammars scope them as
+punctuation, but they are part of the number.
 
 `len`, `make`, `append` and friends sit on the light blue row for the same
 reason types do: they are the language's own vocabulary, not a name anyone in
@@ -83,14 +92,22 @@ TextMate grammar is no better: `entity.name.function.support.go` is
 in the file. Only the `.builtin` variant is selective, and any rule targeting
 that scope must include the segment.
 
-Three traps when editing the VS Code side:
+Four traps when editing the VS Code side:
 
 - `foreground` and `fontStyle` resolve **independently** through the scope trie,
   so a later rule that sets only `foreground` still inherits bold from an
-  ancestor rule. `keyword.operator` is a child of `keyword`; clearing its bold
-  needs an explicit `"fontStyle": ""`, not an omitted one. So is
-  `keyword.other.unit`, which is why the `0x` of a hex literal needs the same
-  treatment.
+  ancestor rule. `keyword.other.unit` is a child of `keyword`; keeping the `0x`
+  of a hex literal unbolded needs an explicit `"fontStyle": ""`, not an omitted
+  one. The same inheritance is what makes `new` and `sizeof` blue-bold: the
+  blue comes from their own `keyword.operator.*` rules, the bold from
+  `keyword.operator`.
+- Selectors are **dotted prefixes**, and grammars name brackets a dozen ways
+  (`meta.brace.round`, `punctuation.brackets.round.rust`,
+  `punctuation.section.parens`, `punctuation.definition.begin.bracket.round.go`,
+  …), so the bracket rule is a long list rather than one scope. Prefer the
+  narrowest prefix that still matches: `punctuation.definition.entity` would
+  catch CSS's `.class` and `#id` markers along with `[attr]` brackets, and
+  `punctuation.parenthesis` would catch regex groups inside strings.
 - Style also inherits **down the scope stack**, not just along the dotted name. A
   token scoped `entity.name.import.go` nested inside `string.quoted.double.go`
   is already gold with no rule of its own, and the same goes for
@@ -100,8 +117,10 @@ Three traps when editing the VS Code side:
   Every role a language server reports therefore has to be repeated in
   `semanticTokenColors`, or the TextMate colour silently stands.
 
-Brackets carry no `tokenColors` entry — `editorBracketHighlight.foreground1‑6`
-are all `#956ccc`, which is what puts them in the purple slot.
+Brackets are purple in two layers: `editorBracketHighlight.foreground1‑6` are all
+`#956ccc`, and the `tokenColors` bracket rules set the same colour plus bold.
+Bracket-pair colourisation only paints colour, so the weight always comes from
+the rule, and the colour from the rule when the feature is off.
 
 ### A package is only a package where the parser can prove it
 

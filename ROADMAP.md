@@ -60,9 +60,18 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   joining packages, struct fields and attributes as one family: a named, declared
   thing. Previously blue also meant type, enum, boolean and tag, so it had
   stopped distinguishing anything.
-- **Punctuation gave back its budget.** `.` `,` `:` are neutral in both editors,
-  and bold left punctuation entirely. It was the highest-frequency coloured token
-  class in the corpus and carried no information.
+- **Punctuation is purple bold in both editors** — operators, brackets and
+  `,` `;` `.` `:`. It is the highest-frequency token class in the corpus, and
+  weight is what lets it mark where a call opens or a statement ends without
+  being read; the names in between stay neutral by contrast. VS Code needed the
+  per-grammar scopes spelled out (Go's `punctuation.other.*`, Rust's
+  `punctuation.comma` / `punctuation.semi`, a dozen bracket spellings), Zed needed
+  `punctuation.delimiter` moved onto the purple row. Digit separators, decimal
+  points and exponent signs stay with the number on both sides. Verified by
+  tokenising the whole corpus through the real grammars: 387 scope leaves changed
+  style, every one a bracket, operator or separator; the five word-shaped
+  operators (`new`, `sizeof`, `instanceof`, `is`, `not`) went blue-bold with the
+  keywords.
 - **VS Code learned the roles it was missing** — types, packages, escape
   sequences and printf placeholders had all been falling through to
   `editor.foreground`.
@@ -74,7 +83,7 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   `new`, `panic`. Same argument as types: language vocabulary, not a name from
   this repo. Gold now means string and nothing else.
 - **The `0x` of a hex literal was bold.** `keyword.other.unit` is a child of
-  `keyword` and inherited it — the same trap as `keyword.operator`, found by
+  `keyword` and inherited it; it needs an explicit `fontStyle: ""`. Found by
   tokenising the file rather than by looking at it.
 - **Verified rather than eyeballed.** The file was run through the real Go
   TextMate grammar and Zed's real `highlights.scm`, and the two colour streams
