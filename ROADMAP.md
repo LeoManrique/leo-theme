@@ -42,9 +42,8 @@ only the verdict belongs here.
 Fixes from the `01-markdown.md` pass:
 
 - Markdown **bold and italic are light blue `#9cdcfe`** in both editors, keeping the
-  bold/italic face, delimiters included. Same hue as types and packages in code:
-  emphasis names something, and it stays clear of the keyword blue the headings
-  use. Previously VS Code rendered both neutral and Zed rendered bold blue.
+  bold/italic face, delimiters included. It stays clear of the keyword blue the
+  headings use. Previously VS Code rendered both neutral and Zed rendered bold blue.
 - Markdown link labels are neutral in both. VS Code's link rule covered
   `string.other.link.dest` and `.title` but not `.description`, so `[text]` fell
   through to the generic string rule and came out gold.
@@ -56,10 +55,9 @@ Fixes from the `go/main.go` pass. It found nine divergences, eight of them VS Co
 under-specifying, and exposed that colour was being spent everywhere rather than
 where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 
-- **Blue now means keyword.** Types moved off it onto light blue `#9cdcfe`,
-  joining packages, struct fields and attributes as one family: a named, declared
-  thing. Previously blue also meant type, enum, boolean and tag, so it had
-  stopped distinguishing anything.
+- **Blue now means keyword.** Previously it also meant type, enum, boolean and
+  tag, so it had stopped distinguishing anything. Types moved off it and are now
+  neutral, with packages.
 - **Punctuation is purple bold in both editors** — operators, brackets and
   `,` `;` `.` `:`. It is the highest-frequency token class in the corpus, and
   weight is what lets it mark where a call opens or a statement ends without
@@ -72,23 +70,22 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   style, every one a bracket, operator or separator; the five word-shaped
   operators (`new`, `sizeof`, `instanceof`, `is`, `not`) went blue-bold with the
   keywords.
-- **VS Code learned the roles it was missing** — types, packages, escape
-  sequences and printf placeholders had all been falling through to
-  `editor.foreground`.
+- **VS Code learned the roles it was missing** — escape sequences and printf
+  placeholders had been falling through to `editor.foreground`.
 - **Neutral is now a decision, not a gap.** Struct fields, property accesses,
-  declared constants, variables, parameters, functions and methods are all
-  deliberately uncoloured in both editors: each is already legible from the shape
-  of the line, so a hue there only competes with the ones that inform.
-- **Builtin calls joined the light blue family** — `len`, `make`, `append`,
-  `new`, `panic`. Same argument as types: language vocabulary, not a name from
-  this repo. Gold now means string and nothing else.
+  declared constants, variables, parameters, types and packages are all
+  deliberately uncoloured in both editors, so a hue there does not compete with
+  the ones that inform.
+- **Function and method names are light blue `#9cdcfe`**, declared or called,
+  builtins included. In a signature the function's name is what you scan for, and
+  lit types around it buried it. Gold now means string and nothing else.
 - **The `0x` of a hex literal was bold.** `keyword.other.unit` is a child of
   `keyword` and inherited it; it needs an explicit `fontStyle: ""`. Found by
   tokenising the file rather than by looking at it.
 - **Verified rather than eyeballed.** The file was run through the real Go
   TextMate grammar and Zed's real `highlights.scm`, and the two colour streams
-  compared token by token: 1163 tokens, 3 disagreements, all of them grammar
-  granularity in type-switch and conversion positions. Const names and struct
+  compared token by token: 1163 tokens, 2 disagreements, both of them grammar
+  granularity in type-switch and conversion positions (see Open divergences). Const names and struct
   fields are `#d4d4d4` in both — a perceived difference there is font weight
   (Zed 450 / 13.5 against VS Code 400 / 12.5), not colour.
 - `nil` / `iota` / `true` / `false` are blue and unbolded in both.
@@ -104,23 +101,30 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   while the VCS status colors (`deleted`, `version_control.deleted`) are still
   `#d16969`. Different surfaces, so possibly fine — decide when the item above is
   settled, rather than drifting into it.
-- [ ] **Standard-library calls cannot be told from local ones**, in either
-  editor. gopls only flags universe scope, and Go's grammar scopes every call
-  alike. Revisit only if gopls grows a modifier for it.
-- [ ] **Three Go tokens still disagree, all in positions one grammar reads as a
-  type and the other does not.** `int(s)` is a conversion — a type to VS Code,
-  a call to Zed. `case nil:` and `case []Record:` in a type switch are types to
-  Zed and plain identifiers to VS Code. Neither side can be corrected from a
-  theme file; VS Code is the one under-colouring in two of the three.
+- [ ] **Two Go tokens still disagree, both in positions one grammar reads as a
+  type and the other does not.** `int(s)` is a conversion: a type to VS Code
+  (neutral), a call to Zed (light blue). `case nil:` in a type switch is a type
+  to Zed (neutral) and the `nil` literal to VS Code (blue). Neither side can be
+  corrected from a theme file.
 - [ ] **Zed `variant` is still blue `#5996db`.** VS Code puts enum members on
   pale green `#b5cea8` via `variable.other.enummember`, so Rust's `Some` / `Ok`
-  probably diverge. Verify at the `rust/src/main.rs` pass rather than guessing.
+  probably diverge. VS Code also scopes a tuple variant like `Count(u64)` as a
+  call, so it comes out light blue there. Verify at the `rust/src/main.rs` pass
+  rather than guessing.
 - [ ] **C and C++ builtin types.** Their grammars call `int` a `storage.type`,
-  like Go's does, so they will come out blue-bold instead of teal until they get
-  the same treatment `source.go storage.type` has. Due at the `05-decomp` pass.
+  like Go's does, so they will come out blue-bold instead of neutral like other
+  types until they get the same treatment `source.go storage.type` has. Due at the `05-decomp` pass.
 - [ ] **`variable.other.enummember` is still pale green in VS Code** while Zed's
   `constant` is now neutral. Go never reaches it, so it did not show up here.
   Decide at the Rust and TSX passes, together with `variant`.
+- [ ] **Python probably diverges in two places, in opposite directions.**
+  Keyword-argument names (`key` in `f(key=1)`) are light blue in Zed only: its
+  query captures them `function.kwargs`, which falls back to `function`, while
+  VS Code scopes them as a parameter. Class calls (`Record(...)`) are light blue
+  in VS Code only: its grammar gives every user-defined call the same
+  `meta.function-call.generic`, while Zed captures a capitalised call
+  `type.class.call`, which is neutral. Verify at the `16-script.py` pass rather
+  than guessing.
 
 ## Next
 
@@ -128,9 +132,8 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   keys present in one theme but missing from the other, and colors that drifted apart.
   The markdown emphasis drift above is exactly what it is for: the corpus caught it
   only because someone looked at the right file.
-- **Release the pending fixes.** `package.json` is still at `1.0.2` and `CHANGELOG.md`
-  has no entry for the Zed selection-contrast change or the markdown emphasis and
-  link-label work above.
+- **Release the pending fixes.** The function-name hue is not in the published
+  `1.1.0`, and `CHANGELOG.md` has no entry after `1.0.1`.
 - **Screenshots for the marketplace.** `preview/` doubles as the source. Same window
   size, same files, one shot per editor, stored as a pair so releases stay diffable.
 - **Light variant.** Not started, no palette yet.

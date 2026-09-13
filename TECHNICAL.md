@@ -56,20 +56,20 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 |:--|:--|
 | `#5996db` blue **bold** | keyword, including the word-shaped operators `new` `typeof` `sizeof` `and` `not` |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
-| `#9cdcfe` light blue | type, package, builtin call, attribute, label, markdown emphasis |
+| `#9cdcfe` light blue | function and method name, declared or called, builtins included · attribute, label, markdown emphasis |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |
 | `#956ccc` purple **bold** | punctuation: operator, bracket, and `,` `;` `.` `:` |
-| `#d4d4d4` neutral | everything a program names for itself |
+| `#d4d4d4` neutral | every other name a program declares |
 
 That last row is the largest by design, and it is what makes the rest read as
-highlights. It covers variables, parameters, constants, functions, methods,
-struct fields and property accesses. A declaration already looks like a
-declaration and a call already has its parentheses — colouring either repeats
-what the code says. What earns a hue is the part you cannot infer from the shape
-of the line: which words belong to the language, which name a type or a package,
-and which are literals.
+highlights. It covers variables, parameters, constants, types, packages, struct
+fields and property accesses. What earns a hue is what you scan a line for:
+which words belong to the language, which are literals, and what runs. A
+signature carries several names, and a hue spent on its types buries the one
+that matters. In `func (req CreateChargeRequest) Validate() error` the only lit
+name is `Validate`.
 
 Punctuation is the one exception to "neutral by default", and it is a weight
 decision as much as a colour one: bold purple makes the structure of a line —
@@ -80,17 +80,17 @@ purple-bold is punctuation. Digit separators, decimal points and exponent signs
 inside a number literal are excluded on purpose; grammars scope them as
 punctuation, but they are part of the number.
 
-`len`, `make`, `append` and friends sit on the light blue row for the same
-reason types do: they are the language's own vocabulary, not a name anyone in
-this repo chose. A user-defined call stays neutral.
-
-Neither engine can tell a standard-library call from a locally defined one.
-gopls sets `defaultLibrary` on exactly one condition, `obj.Pkg() == nil`, which
-is universe scope — `len`, `make`, `int`, `nil` — never `fmt.Println`. Go's
-TextMate grammar is no better: `entity.name.function.support.go` is
-`(?:...(\b\w+)...(?=\())`, any word followed by a paren, so it matches every call
-in the file. Only the `.builtin` variant is selective, and any rule targeting
-that scope must include the segment.
+Declarations, calls and builtins share the hue, so each editor needs one rule
+for all of them. In VS Code it is `entity.name.function`: Go's grammar scopes a
+declaration `entity.name.function.go`, every call
+`entity.name.function.support.go` (any word followed by a paren), and the
+universe builtins `entity.name.function.support.builtin.go`. The same rule lists
+`support.function`, where Python and C put their builtins, and
+`meta.function-call.generic`, the only scope Python gives a user-defined call.
+In Zed it is `function`: syntax keys resolve by longest dotted prefix, so
+`function.call`, `function.method`, `function.method.call` and
+`function.builtin` all land on it. A longer key or scope added under either one
+splits the hue.
 
 Four traps when editing the VS Code side:
 
@@ -135,12 +135,11 @@ the two editors behave the same way, both working from a parse tree alone:
 | `context.Context` — a qualified **type** | `entity.name.type` | `(qualified_type)` → `(package_identifier)` | yes |
 | `time.NewTimer(…)` — an expression | `variable.other` | `(selector_expression)` → `(identifier)` | no |
 
-So the same package is light blue in `ctx context.Context` and neutral in
-`context.DeadlineExceeded`. That is not drift: in an expression the qualifier is
-indistinguishable from a local variable without cross-file knowledge, and both
-engines say so. Setting `"gopls": {"ui.semanticTokens": true}` would colour every
-qualifier in VS Code — and diverge from Zed permanently, since Zed ignores LSP
-semantic tokens.
+In an expression the qualifier is indistinguishable from a local variable
+without cross-file knowledge, and both engines say so. A package hue would
+therefore land on `context` in `ctx context.Context` and miss it in
+`context.DeadlineExceeded`. Keeping packages neutral with types means no colour
+depends on which of the two the parser saw.
 
 ## VS Code → Zed key mapping
 
@@ -195,9 +194,9 @@ Zed's `theme_overrides` in the user's `settings.json` is applied on top of the
 theme file and wins. It is the Zed-side analogue of
 `editor.tokenColorCustomizations`, and the same first thing to rule out.
 
-Neither can a theme see further than its engine. Zed highlights from tree-sitter
-alone and ignores LSP semantic tokens, so anything requiring cross-file knowledge
-is invisible to it, and a theme cannot add tree-sitter queries. VS Code can go
-further where a server is configured to help — see
+Neither can a theme see further than its engine. Zed highlights from tree-sitter,
+and uses LSP semantic tokens only when they are turned on in its settings (off by
+default), so by default anything requiring cross-file knowledge is invisible to
+it, and a theme cannot add tree-sitter queries. See
 [the package-qualifier case](#a-package-is-only-a-package-where-the-parser-can-prove-it)
-for what that costs in parity.
+for what a parse tree alone cannot tell.

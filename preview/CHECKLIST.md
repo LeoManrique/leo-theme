@@ -198,14 +198,6 @@ the grammar injection, not the theme.
   presentational attributes. `href` next to it stays
   `entity.other.attribute-name.html`. VS Code is right; Zed's tree-sitter grammar
   has no deprecation concept. Not a theme bug.
-- **A package qualifier is light blue in some places and neutral in others.**
-  `context` is light blue in `ctx context.Context` and neutral in
-  `context.DeadlineExceeded`, and `fmt`, `errors`, `time` are neutral throughout.
-  Both editors do this, identically: a qualified *type* is a distinct parse node,
-  a selector *expression* is not, and neither parser can tell `time` from a local
-  variable there. `gopls.ui.semanticTokens` is off by default, so VS Code has no
-  more information than Zed. Parser limit, not a theme bug — full reasoning in
-  [TECHNICAL.md](../TECHNICAL.md#a-package-is-only-a-package-where-the-parser-can-prove-it).
 - **Setext heading text is plain in VS Code.** Its markdown grammar scopes only
   the `===` / `---` underline as a heading, never the line above it. Zed's
   tree-sitter grammar captures the whole node, so the text is blue there.

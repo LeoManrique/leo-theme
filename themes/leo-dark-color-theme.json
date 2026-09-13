@@ -175,8 +175,6 @@
     { "name": "coloring of the Java import and package identifiers", "scope": ["storage.modifier.import.java", "variable.language.wildcard.java", "storage.modifier.package.java"], "settings": {"foreground": "#d4d4d4"} },
     { "name": "this.self", "scope": "variable.language", "settings": {"foreground": "#5996db"} },
     // ── LEO · syntax overrides ──
-    { "name": "Functions", "scope": ["entity.name.function"], "settings": {"foreground": "#d4d4d4"} },
-    { "name": "Builtin / library functions (print, len, ...) — language vocabulary, so same family as types", "scope": ["support.function"], "settings": {"foreground": "#9cdcfe"} },
     { "name": "Strings", "scope": ["string", "punctuation.definition.string"], "settings": {"foreground": "#dec078"} },
     // ── LEO · Markdown — prose neutral, headings/markers blue, emphasis light blue ──
     { "name": "Markdown inline code", "scope": ["markup.inline.raw", "markup.inline.raw.string.markdown", "punctuation.definition.raw.markdown"], "settings": {"foreground": "#dec078"} },
@@ -198,10 +196,16 @@
     // Grammars scope brackets a dozen ways, so: one generic list, one per-grammar list. Selectors are prefixes — punctuation.definition.bracket also reaches jsdoc's {Type} braces, on purpose.
     { "name": "Brackets ( ) [ ] { } < > — generic scopes (section.function / section.class also cover Python's block colon)", "scope": ["punctuation.section.parens", "punctuation.section.brackets", "punctuation.section.braces", "punctuation.section.block", "punctuation.section.group", "punctuation.section.arguments", "punctuation.section.parameters", "punctuation.section.function", "punctuation.section.class", "punctuation.section.scope", "punctuation.section.array", "punctuation.section.begin.bracket", "punctuation.section.end.bracket", "punctuation.section.angle-brackets", "punctuation.definition.begin.bracket", "punctuation.definition.end.bracket", "punctuation.definition.bracket", "punctuation.definition.parameters", "punctuation.definition.arguments", "punctuation.definition.typeparameters", "punctuation.definition.array", "punctuation.definition.dictionary", "punctuation.brackets", "punctuation.bracket", "meta.brace.round", "meta.brace.square", "meta.brace.curly", "meta.brace.angle"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
     { "name": "Brackets — per-grammar scopes: TS/JS blocks and destructuring, Go imports, Python, Java sections, CSS/SCSS, Swift, shell, YAML flow, TOML tables", "scope": ["punctuation.definition.block.ts", "punctuation.definition.block.tsx", "punctuation.definition.block.js", "punctuation.definition.binding-pattern", "punctuation.definition.imports", "punctuation.parenthesis.begin.python", "punctuation.parenthesis.end.python", "punctuation.definition.list.begin.python", "punctuation.definition.list.end.python", "punctuation.definition.dict", "punctuation.definition.inheritance", "punctuation.section.method", "punctuation.section.try", "punctuation.section.catch", "punctuation.section.finally", "punctuation.section.enum", "punctuation.section.inner-class", "punctuation.section.module", "punctuation.section.array-initializer", "punctuation.definition.annotation-arguments", "punctuation.section.property-list", "punctuation.section.media", "punctuation.section.keyframes", "punctuation.section.supports", "punctuation.section.document", "punctuation.definition.media-query", "punctuation.definition.map", "punctuation.definition.condition", "punctuation.definition.pseudo-class", "punctuation.definition.attribute-selector", "punctuation.definition.entity.begin.bracket.square.css", "punctuation.definition.entity.end.bracket.square.css", "punctuation.section.collection-type", "punctuation.definition.type.begin.swift", "punctuation.definition.type.end.swift", "punctuation.definition.subshell", "punctuation.definition.logical-expression", "punctuation.section.arithmetic", "punctuation.section.parenthese", "punctuation.definition.sequence", "punctuation.definition.mapping", "punctuation.definition.table.toml", "punctuation.definition.table.inline.toml"], "settings": {"foreground": "#956ccc", "fontStyle": "bold"} },
-    // ── LEO · Structure — types, packages and builtins light blue; everything a program names itself stays neutral ──
-    { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#9cdcfe"} },
-    { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#9cdcfe", "fontStyle": ""} },
-    { "name": "Packages / namespaces — same family as types: not a value", "scope": ["entity.name.namespace", "entity.name.type.namespace", "entity.name.type.module", "entity.name.type.package", "entity.name.scope-resolution", "storage.modifier.package", "support.other.namespace"], "settings": {"foreground": "#9cdcfe"} },
+    // ── LEO · Structure — function and method names light blue, whether declared, called or builtin; types and packages neutral ──
+    // One scope reaches all three in Go: a declaration is entity.name.function.go, every call is
+    // entity.name.function.support.go, and the universe builtins (len, append, ...) add .builtin.
+    // Python is the exception: its grammar gives a user-defined call only meta.function-call.generic.
+    { "name": "Functions and methods — declarations, calls and builtins", "scope": ["entity.name.function", "support.function", "meta.function-call.generic"], "settings": {"foreground": "#9cdcfe"} },
+    // Types and packages stay neutral so a signature has one lit name: in
+    // func (req CreateChargeRequest) Validate() error, that name is Validate.
+    { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#d4d4d4"} },
+    { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#d4d4d4", "fontStyle": ""} },
+    { "name": "Packages / namespaces — same family as types: not a value", "scope": ["entity.name.namespace", "entity.name.type.namespace", "entity.name.type.module", "entity.name.type.package", "entity.name.scope-resolution", "storage.modifier.package", "support.other.namespace"], "settings": {"foreground": "#d4d4d4"} },
     // Struct fields, object properties and declared constants stay neutral on purpose:
     // the declaration already reads as one, and colouring it says nothing the code doesn't.
     { "name": "Labels", "scope": ["variable.other.label", "entity.name.label"], "settings": {"foreground": "#9cdcfe"} },
@@ -209,9 +213,6 @@
     // fontStyle has to be cleared, not omitted: keyword.other.unit is a child of keyword and would inherit its bold.
     { "name": "Number prefixes and units (0x, 0b, px) — part of the number, never bold", "scope": ["keyword.other.unit"], "settings": {"foreground": "#b5cea8", "fontStyle": ""} },
     { "name": "printf placeholders — Zed's grammars cannot separate these from the string", "scope": ["constant.other.placeholder"], "settings": {"foreground": "#dec078"} },
-    // .builtin is load-bearing: Go scopes *every* call entity.name.function.support, only the 16
-    // universe builtins get the extra segment. Without it this paints every call site.
-    { "name": "Builtin calls — append, len, make, new, panic, ...", "scope": ["entity.name.function.support.builtin"], "settings": {"foreground": "#9cdcfe"} },
     // ── LEO · Shell / bash (terminal-like) ──
     { "name": "Shell variables ($HOME, $VAR)", "scope": ["variable.other.normal.shell", "variable.other.special.shell", "variable.parameter.positional.shell", "punctuation.definition.variable.shell"], "settings": {"foreground": "#56b6c2"} },
     { "name": "Shell builtins / commands (cd, echo, ...)", "scope": ["support.function.builtin.shell", "entity.name.function.shell", "entity.name.command.shell", "meta.function-call.command.shell"], "settings": {"foreground": "#D4D4D4"} },
@@ -229,13 +230,15 @@
     "customLiteral": "#D4D4D4",
     "numberLiteral": "#b5cea8",
     // ── LEO · Structure — mirrors the tokenColors block above ──
-    "namespace": "#9cdcfe",
-    "type": {"foreground": "#9cdcfe", "bold": false},
-    "class": "#9cdcfe",
-    "struct": "#9cdcfe",
-    "interface": "#9cdcfe",
-    "enum": "#9cdcfe",
-    "typeParameter": "#9cdcfe",
+    "function": "#9cdcfe",
+    "method": "#9cdcfe",
+    "namespace": "#d4d4d4",
+    "type": {"foreground": "#d4d4d4", "bold": false},
+    "class": "#d4d4d4",
+    "struct": "#d4d4d4",
+    "interface": "#d4d4d4",
+    "enum": "#d4d4d4",
+    "typeParameter": "#d4d4d4",
     "enumMember": "#b5cea8",
     "operator": {"foreground": "#956ccc", "bold": true},
     // ── LEO · strike through deprecated symbols ──
