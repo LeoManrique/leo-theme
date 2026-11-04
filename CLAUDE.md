@@ -7,6 +7,7 @@ Keep these documents up to date and concise, without repeating information betwe
 - Update `./TECHNICAL.md` after changing any technical architecture or implementation detail.
 - Update `./ROADMAP.md` after completing any point mentioned there. Also add new features that come up while developing.
 - Update `./README.md` after completing a change that affects the essence of the project.
+- Update `./CHANGELOG.md` after any change that ships in the `.vsix`, under `## Unreleased` until it gets a version. This one is a history, so add entries and keep the old ones.
 
 ## English tutor
 

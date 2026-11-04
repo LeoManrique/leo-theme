@@ -1,101 +1,40 @@
-# Publishing Leo Dark to the VS Code Marketplace
+# Publishing Leo Dark
 
-A step-by-step guide to publish (and update) this theme.
+The extension is `leoshell.leo-theme`. Every release uploads the same `.vsix` to two registries:
 
----
+| Registry | Serves | Listing | Upload from |
+|:--|:--|:--|:--|
+| VS Code Marketplace | VS Code | [listing](https://marketplace.visualstudio.com/items?itemName=leoshell.leo-theme) | [manage page](https://marketplace.visualstudio.com/manage), with a personal Microsoft account |
+| Open VSX | Cursor | [listing](https://open-vsx.org/extension/leoshell/leo-theme) | [open-vsx.org](https://open-vsx.org), with the `LeoManrique` GitHub account |
+
+Cursor reads Open VSX, not the VS Code Marketplace, so a release only reaches it through the second upload.
+
+If the manage page drops you into a work or school tenant, open a private window and choose **Use another account**.
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org) installed
-- A **personal** Microsoft account (e.g. an `@outlook.com` address). Avoid using a
-  work/school account — your extension shouldn't be tied to an org you might lose
-  access to, and org tenants are what cause the `dev.azure.com` redirect mess.
-- A [GitHub](https://github.com) repo for this project (recommended)
-
-Install the packaging CLI (used only to build the `.vsix` — no login required):
+[Node.js](https://nodejs.org) and the packaging CLI, which needs no login:
 
 ```bash
 npm install -g @vscode/vsce
 ```
 
----
+## Release
 
-## Route A — Manual web upload (recommended, no token)
+1. In `CHANGELOG.md`, rename `## Unreleased` to the new version.
+2. Bump `"version"` in `package.json`, following [semver](https://semver.org).
+3. Package it. `.vscodeignore` decides what ships.
 
-### Step 1 — Create a Marketplace publisher
+   ```bash
+   vsce package
+   ```
 
-1. Go to the [Marketplace publisher management page](https://marketplace.visualstudio.com/manage).
-2. Sign in with your **personal** Microsoft account.
-3. Click **Create publisher**.
-4. Choose a unique **publisher ID** (e.g. `leomanrique`) and a display name, then **Create**.
+4. Test `leo-theme-<version>.vsix`: Extensions view → `…` → **Install from VSIX…**, reload the window, then `Cmd/Ctrl+K` `Cmd/Ctrl+T` → **Leo Dark**.
+5. Upload to the VS Code Marketplace: on the manage page, open the extension → **…** → **Update**, and drag in the `.vsix`.
+6. Upload to Open VSX: **Publish** → **Publish Extension**, and drag in the same `.vsix`. To use the CLI instead, generate a token under **Settings** → **Access Tokens**:
 
-> If sign-in keeps dropping you into a work/school tenant, open a private/incognito
-> window and choose **"Use another account"** to sign in with your personal account.
+   ```bash
+   npx ovsx publish leo-theme-<version>.vsix -p "$OVSX_PAT"
+   ```
 
-### Step 2 — Prepare `package.json`
-
-Make sure the manifest is publish-ready:
-
-- [ ] Remove `"private": true` (vsce refuses to package private projects)
-- [ ] Set `"publisher"` to the exact publisher ID from Step 1:
-
-  ```json
-  "publisher": "leomanrique"
-  ```
-
-- [ ] Add a `repository` field:
-
-  ```json
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LeoManrique/leo-theme.git"
-  }
-  ```
-
-- [ ] (Optional) Add an icon — a 128×128 PNG referenced by `"icon": "icon.png"`
-- [ ] Bump `"version"` using [semver](https://semver.org) when releasing updates
-
-### Step 3 — Add supporting files
-
-- [ ] **`LICENSE`** — you declare `"license": "MIT"`, so include the matching file
-- [ ] **`README.md`** — shown on the Marketplace listing page (already present)
-- [ ] **`CHANGELOG.md`** (optional) — release notes shown in the *Changelog* tab
-- [ ] **`.vscodeignore`** — exclude dev files from the package:
-
-  ```
-  .git/
-  .gitignore
-  .vscodeignore
-  PUBLISHING.md
-  ```
-
-### Step 4 — Package the `.vsix`
-
-```bash
-vsce package
-```
-
-This produces `leo-theme-<version>.vsix`. **Test it before publishing:**
-
-1. VS Code → Extensions view → `…` menu → **Install from VSIX…**
-2. Select the `.vsix`, reload the window.
-3. `Ctrl/Cmd+K Ctrl/Cmd+T` → choose **Leo Dark** and confirm it looks right.
-
-### Step 5 — Upload it
-
-1. Back on the [publisher management page](https://marketplace.visualstudio.com/manage),
-   select your publisher.
-2. Click **New extension → Visual Studio Code**.
-3. Drag in (or browse to) your `leo-theme-<version>.vsix`.
-
-The extension appears on the Marketplace within a few minutes at:
-
-```
-https://marketplace.visualstudio.com/items?itemName=<publisher-id>.leo-theme
-```
-
-### Updating later (manual)
-
-1. Bump `"version"` in `package.json`.
-2. Run `vsce package` again.
-3. On the [manage page](https://marketplace.visualstudio.com/manage), open your extension → **…** → **Update** → drag in the new `.vsix`.
+7. Check that both listings show the new version, then search for `leoshell.leo-theme` in Cursor. Cursor syncs from Open VSX, so it can lag behind.

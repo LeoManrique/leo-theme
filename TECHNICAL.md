@@ -3,6 +3,7 @@
 - **VS Code source of truth:** [`themes/leo-dark-color-theme.json`](themes/leo-dark-color-theme.json) — edit it directly.
 - **Zed source of truth:** [`themes/leo-dark.json`](themes/leo-dark.json) — schema `v0.2.0`, edit it directly.
 - **Base type:** `vs-dark`. Anything not overridden falls back to VS Code's vs-dark defaults.
+- **Cursor:** runs the VS Code theme file unchanged, from the same `.vsix` ([PUBLISHING.md](PUBLISHING.md)). `install-dev.py` does not link it.
 - The two files are maintained by hand and nothing propagates between them. A fix
   applied to one is not applied to the other until you do it.
 

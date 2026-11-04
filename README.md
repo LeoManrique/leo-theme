@@ -1,6 +1,6 @@
 # Leo Dark
 
-A calm dark theme for VS Code. Built to highlight important stuff in code without turning your editor into a rainbow.
+A calm dark theme for VS Code and Cursor. Built to highlight important stuff in code without turning your editor into a rainbow.
 
 ## Highlights
 
@@ -19,7 +19,7 @@ A calm dark theme for VS Code. Built to highlight important stuff in code withou
 ## Install
 
 1. Open the **Extensions** view (`Cmd/Ctrl+Shift+X`).
-2. Search for **Leo Dark**.
+2. Search for **Leo Dark**, or its ID `leoshell.leo-theme`.
 3. Click **Install**.
 4. `Cmd/Ctrl+K` `Cmd/Ctrl+T` → select **Leo Dark**.
 

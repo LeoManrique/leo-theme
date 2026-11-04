@@ -8,6 +8,8 @@
   state-driven surfaces.
 - **Dev install.** `install-dev.py` links both editors at the repo, so a pass tests
   the working tree instead of a published snapshot.
+- **Published.** `leoshell.leo-theme` is live on the VS Code Marketplace and on Open
+  VSX, which is what Cursor reads. Process in [PUBLISHING.md](PUBLISHING.md).
 
 ## Parity pass
 
@@ -132,8 +134,10 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   keys present in one theme but missing from the other, and colors that drifted apart.
   The markdown emphasis drift above is exactly what it is for: the corpus caught it
   only because someone looked at the right file.
-- **Release the pending fixes.** The function-name hue is not in the published
-  `1.1.0`, and `CHANGELOG.md` has no entry after `1.0.1`.
-- **Screenshots for the marketplace.** `preview/` doubles as the source. Same window
+- **Publish `1.2.0` to the VS Code Marketplace.** Open VSX has it, but VS Code still
+  serves `1.1.0`, without the function-name hue. Steps in [PUBLISHING.md](PUBLISHING.md).
+- **Verify the Open VSX namespace.** `leoshell` is unverified until ownership is
+  requested from Open VSX, and until then the listing carries a warning.
+- **Screenshots for the marketplaces.** `preview/` doubles as the source. Same window
   size, same files, one shot per editor, stored as a pair so releases stay diffable.
 - **Light variant.** Not started, no palette yet.
