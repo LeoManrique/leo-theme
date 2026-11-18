@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Link this repo's themes into VS Code and Zed for local editing.
+"""Link this repo's themes into VS Code, Cursor and Zed for local editing.
 
-VS Code gets a separate "Leo Dark (Dev)" extension rather than an overwrite of
-the marketplace install: the store copy is owned by VS Code's own extension
-manager, and an auto-update would silently restore the published colors. A
-distinct publisher.name also keeps the two out of each other's way in the theme
-picker, so the dev build can be compared against the released one.
+VS Code and Cursor each get a separate "Leo Dark (Dev)" extension rather than an
+overwrite of the store install: the store copy is owned by the editor's own
+extension manager, and an auto-update would silently restore the published
+colors. A distinct publisher.name also keeps the two out of each other's way in
+the theme picker, so the dev build can be compared against the released one.
 
 Zed gets a symlink. A copy goes stale without saying so.
 
-    python3 install-dev.py              # both editors
+    python3 install-dev.py              # every editor found
+    python3 install-dev.py --cursor     # one editor (also --vscode, --zed)
     python3 install-dev.py --status     # report, change nothing
     python3 install-dev.py --uninstall  # remove what this script created
 """
@@ -23,7 +24,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 
-VSCODE_EXTENSIONS = Path.home() / ".vscode" / "extensions"
+# VS Code and its forks: same extension format, each with its own extensions dir.
+VSCODE_EDITORS = {
+    "vscode": ("VS Code", Path.home() / ".vscode" / "extensions"),
+    "cursor": ("Cursor", Path.home() / ".cursor" / "extensions"),
+}
 ZED_THEMES = Path.home() / ".config" / "zed" / "themes"
 
 DEV_PUBLISHER = "leo-dev"
@@ -42,12 +47,12 @@ def repo_manifest():
     return json.loads((REPO / "package.json").read_text())
 
 
-def dev_extension_dirs():
-    """Every dev extension this script has ever installed, any version."""
-    if not VSCODE_EXTENSIONS.is_dir():
+def dev_extension_dirs(extensions):
+    """Every dev extension this script has ever installed in one editor, any version."""
+    if not extensions.is_dir():
         return []
     prefix = f"{DEV_PUBLISHER}.{DEV_NAME}-"
-    return sorted(p for p in VSCODE_EXTENSIONS.iterdir() if p.name.startswith(prefix))
+    return sorted(p for p in extensions.iterdir() if p.name.startswith(prefix))
 
 
 def dev_manifest(source):
@@ -88,18 +93,18 @@ def link(target, link_path):
     link_path.symlink_to(target)
 
 
-def install_vscode():
-    if not VSCODE_EXTENSIONS.is_dir():
-        say("skip", f"VS Code extensions dir not found at {VSCODE_EXTENSIONS}")
+def install_vscode(editor, extensions):
+    if not extensions.is_dir():
+        say("skip", f"{editor} extensions dir not found at {extensions}")
         return False
 
     source = repo_manifest()
     # Old versions first: the dir name encodes the version, so a version bump
     # would otherwise leave a second dev extension registered alongside.
-    for stale in dev_extension_dirs():
+    for stale in dev_extension_dirs(extensions):
         shutil.rmtree(stale)
 
-    ext = VSCODE_EXTENSIONS / f"{DEV_PUBLISHER}.{DEV_NAME}-{source['version']}"
+    ext = extensions / f"{DEV_PUBLISHER}.{DEV_NAME}-{source['version']}"
     ext.mkdir(parents=True)
     (ext / "package.json").write_text(json.dumps(dev_manifest(source), indent=2) + "\n")
     link(REPO / "themes", ext / "themes")
@@ -127,10 +132,11 @@ def install_zed():
 
 def uninstall():
     removed = False
-    for ext in dev_extension_dirs():
-        shutil.rmtree(ext)
-        say("removed", ext)
-        removed = True
+    for _, extensions in VSCODE_EDITORS.values():
+        for ext in dev_extension_dirs(extensions):
+            shutil.rmtree(ext)
+            say("removed", ext)
+            removed = True
 
     installed = ZED_THEMES / ZED_THEME
     if installed.is_symlink():
@@ -144,18 +150,23 @@ def uninstall():
         say("clean", "nothing installed by this script")
 
 
-def status():
-    marketplace = sorted(VSCODE_EXTENSIONS.glob("leoshell.leo-theme-*")) if VSCODE_EXTENSIONS.is_dir() else []
+def status_vscode(editor, extensions):
+    marketplace = sorted(extensions.glob("leoshell.leo-theme-*")) if extensions.is_dir() else []
     for ext in marketplace:
-        say("store", f"{ext.name}  (published build, untouched)")
+        say("store", f"{ext}  (published build, untouched)")
 
-    dev = dev_extension_dirs()
+    dev = dev_extension_dirs(extensions)
     for ext in dev:
         themes = ext / "themes"
         live = themes.is_symlink() and Path(os.readlink(themes)) == REPO / "themes"
-        say("dev" if live else "broken", f"{ext.name}  ->  {os.readlink(themes) if themes.is_symlink() else 'not a symlink'}")
+        say("dev" if live else "broken", f"{ext}  ->  {os.readlink(themes) if themes.is_symlink() else 'not a symlink'}")
     if not dev:
-        say("missing", f'VS Code "{DEV_LABEL}" not installed')
+        say("missing", f'{editor} "{DEV_LABEL}" not installed')
+
+
+def status():
+    for editor, extensions in VSCODE_EDITORS.values():
+        status_vscode(editor, extensions)
 
     installed = ZED_THEMES / ZED_THEME
     if installed.is_symlink():
@@ -169,9 +180,10 @@ def status():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--vscode", action="store_true", help="VS Code only")
+    for key, (editor, _) in VSCODE_EDITORS.items():
+        parser.add_argument(f"--{key}", action="store_true", help=f"{editor} only")
     parser.add_argument("--zed", action="store_true", help="Zed only")
-    parser.add_argument("--uninstall", action="store_true", help="remove the dev extension and Zed symlink")
+    parser.add_argument("--uninstall", action="store_true", help="remove the dev extensions and Zed symlink")
     parser.add_argument("--status", action="store_true", help="report what is installed, change nothing")
     args = parser.parse_args()
 
@@ -183,15 +195,19 @@ def main():
         uninstall()
         return 0
 
-    both = not (args.vscode or args.zed)
-    did_vscode = install_vscode() if (both or args.vscode) else False
-    did_zed = install_zed() if (both or args.zed) else False
+    everything = not (args.zed or any(getattr(args, key) for key in VSCODE_EDITORS))
+    linked = [
+        editor
+        for key, (editor, extensions) in VSCODE_EDITORS.items()
+        if (everything or getattr(args, key)) and install_vscode(editor, extensions)
+    ]
+    did_zed = install_zed() if (everything or args.zed) else False
 
     print()
-    if did_vscode:
-        print(f'  VS Code   reload the window, then pick "{DEV_LABEL}" in the theme picker.')
+    for editor in linked:
+        print(f'  {editor:<9} reload the window, then pick "{DEV_LABEL}" in the theme picker.')
     if did_zed:
-        print("  Zed       select Leo Dark; restart Zed if an edit does not show up.")
+        print(f"  {'Zed':<9} select Leo Dark; restart Zed if an edit does not show up.")
     return 0
 
 
