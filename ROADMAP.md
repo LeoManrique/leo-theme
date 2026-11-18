@@ -34,6 +34,8 @@ only the verdict belongs here.
 - [ ] `15-patch.diff`
 - [ ] `16-script.py`
 - [ ] `17-main.zig`
+- [ ] `18-main.kt`
+- [ ] `19-collector.ex`
 - [x] `go/main.go` — 9 divergences, and a palette rework it triggered
 - [ ] `rust/src/main.rs`
 - [ ] `Main.java`
@@ -59,7 +61,7 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 
 - **Blue now means keyword.** Previously it also meant type, enum, boolean and
   tag, so it had stopped distinguishing anything. Types and packages moved off
-  it onto a hue of their own, mint `#8abbae`.
+  it onto a hue of their own, mint `#97c1ac`.
 - **Punctuation is purple bold in both editors** — operators, brackets and
   `,` `;` `.` `:`. It is the highest-frequency token class in the corpus, and
   weight is what lets it mark where a call opens or a statement ends without
@@ -113,9 +115,11 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   probably diverge. VS Code also scopes a tuple variant like `Count(u64)` as a
   call, so it comes out light blue there. Verify at the `rust/src/main.rs` pass
   rather than guessing.
-- [ ] **C and C++ builtin types.** Their grammars call `int` a `storage.type`,
-  like Go's does, so they will come out blue-bold instead of mint like other
-  types until they get the same treatment `source.go storage.type` has. Due at the `05-decomp` pass.
+- [ ] **Builtin types in C, C++, SQL and Java.** Their grammars call `int` or
+  `BIGINT` a `storage.type`, like Go's does (`storage.type.sql`,
+  `storage.type.primitive.java`), so they come out blue-bold instead of mint
+  like other types until they get the same treatment `source.go storage.type`
+  has. Due at the `05-decomp`, `12-queries.sql` and `Main.java` passes.
 - [ ] **`variable.other.enummember` is still pale green in VS Code** while Zed's
   `constant` is now neutral. Go never reaches it, so it did not show up here.
   Decide at the Rust and TSX passes, together with `variant`.

@@ -203,9 +203,9 @@
     { "name": "Functions and methods — declarations, calls and builtins", "scope": ["entity.name.function", "support.function", "meta.function-call.generic"], "settings": {"foreground": "#9cdcfe"} },
     // Types and packages share a softer hue than the function name, so a signature shows both without
     // them competing: in func (req CreateChargeRequest) Validate() error, Validate is still the brightest name.
-    { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#8abbae"} },
-    { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#8abbae", "fontStyle": ""} },
-    { "name": "Packages / namespaces — same family as types: not a value", "scope": ["entity.name.namespace", "entity.name.type.namespace", "entity.name.type.module", "entity.name.type.package", "entity.name.scope-resolution", "storage.modifier.package", "support.other.namespace"], "settings": {"foreground": "#8abbae"} },
+    { "name": "Types — declared and builtin", "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.other.inherited-class"], "settings": {"foreground": "#97c1ac"} },
+    { "name": "Go writes its builtin types as storage.type — keep them with the other types, not with the keywords", "scope": ["source.go storage.type"], "settings": {"foreground": "#97c1ac", "fontStyle": ""} },
+    { "name": "Packages / namespaces — same family as types: not a value", "scope": ["entity.name.namespace", "entity.name.type.namespace", "entity.name.type.module", "entity.name.type.package", "entity.name.scope-resolution", "storage.modifier.package", "support.other.namespace"], "settings": {"foreground": "#97c1ac"} },
     // Struct fields, object properties and declared constants stay neutral on purpose:
     // the declaration already reads as one, and colouring it says nothing the code doesn't.
     { "name": "Labels", "scope": ["variable.other.label", "entity.name.label"], "settings": {"foreground": "#9cdcfe"} },
@@ -232,13 +232,13 @@
     // ── LEO · Structure — mirrors the tokenColors block above ──
     "function": "#9cdcfe",
     "method": "#9cdcfe",
-    "namespace": "#8abbae",
-    "type": {"foreground": "#8abbae", "bold": false},
-    "class": "#8abbae",
-    "struct": "#8abbae",
-    "interface": "#8abbae",
-    "enum": "#8abbae",
-    "typeParameter": "#8abbae",
+    "namespace": "#97c1ac",
+    "type": {"foreground": "#97c1ac", "bold": false},
+    "class": "#97c1ac",
+    "struct": "#97c1ac",
+    "interface": "#97c1ac",
+    "enum": "#97c1ac",
+    "typeParameter": "#97c1ac",
     "enumMember": "#b5cea8",
     "operator": {"foreground": "#956ccc", "bold": true},
     // ── LEO · strike through deprecated symbols ──

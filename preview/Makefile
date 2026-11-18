@@ -89,6 +89,10 @@ check: ## Verify every sample still parses
 	$(Q)command -v just >/dev/null && just --summary >/dev/null || echo "    (just not installed, skipped)"
 	@echo "  CHECK   zig"
 	$(Q)command -v zig >/dev/null && zig ast-check 17-main.zig || echo "    (zig not installed, skipped)"
+	@echo "  CHECK   kotlin"
+	$(Q)command -v kotlinc >/dev/null && kotlinc 18-main.kt -d $(BUILD_DIR)/kotlin || echo "    (kotlinc not installed, skipped)"
+	@echo "  CHECK   elixir"
+	$(Q)command -v elixirc >/dev/null && elixirc 19-collector.ex -o $(BUILD_DIR)/elixir || echo "    (elixirc not installed, skipped)"
 	@echo "  all samples parse"
 
 list: ## List the numbered samples

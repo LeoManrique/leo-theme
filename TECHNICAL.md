@@ -61,7 +61,7 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 | `#5996db` blue **bold** | keyword, including the word-shaped operators `new` `typeof` `sizeof` `and` `not` |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
 | `#9cdcfe` light blue | function and method name, declared or called, builtins included · attribute, label, markdown emphasis |
-| `#8abbae` mint | type, declared or builtin · package and namespace |
+| `#97c1ac` mint | type, declared or builtin · package and namespace |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |
@@ -190,7 +190,8 @@ semantic tokens — outside a module they degrade to partial analysis, and you e
 up comparing Zed's complete output against VS Code's incomplete one.
 
 `make check` (run from `preview/`) re-verifies that the Go, Rust, C, Python, JSON
-and shell samples still parse.
+and shell samples still parse, and the Zig, Kotlin and Elixir ones when their
+compilers are installed.
 
 ## What a color theme cannot do
 

@@ -65,15 +65,19 @@ looks **exactly** like a broken theme — this is the single most common way a
 parity pass produces a false positive.
 
 Open every sample once and check it is highlighted at all. Zed currently has
-only `html`, `toml` and `zig` installed, so expect to need extensions for:
+only `html`, `kotlin` and `elixir` installed, so expect to need extensions for:
 
 ```
-svelte · lua · swift · sql · scss · java · dockerfile · make · just
+svelte · lua · swift · sql · scss · java · dockerfile · make · just · toml · zig
 ```
 
-VS Code covers everything here except **Zig** — either from a built-in
-TextMate grammar or from an extension you already have (`golang.go`,
-`rust-analyzer`, `svelte.svelte-vscode`, `skellock.just`, `ms-azuretools.vscode-docker`).
+VS Code covers everything here except **Zig**, **Kotlin** and **Elixir**,
+either from a built-in TextMate grammar or from an extension you already have
+(`golang.go`, `rust-analyzer`, `svelte.svelte-vscode`, `skellock.just`,
+`ms-azuretools.vscode-docker`). Cursor has the two VS Code lacks,
+`fwcd.kotlin` and `elixir-lsp.elixir-ls`; install the same pair in VS Code.
+Cursor runs `fwcd.kotlin` with its language server off, so `18-main.kt` is
+coloured from the TextMate grammar alone there.
 
 Optional, for full semantic tokens in `02-react.tsx`:
 
@@ -209,4 +213,5 @@ the grammar injection, not the theme.
 cd preview && make check
 ```
 
-Covers Go, Rust, C, Python, JSON and shell. The rest are not compiled here.
+Covers Go, Rust, C, Python, JSON and shell, plus Zig, Kotlin and Elixir when
+their compilers are installed. The rest are not compiled here.
