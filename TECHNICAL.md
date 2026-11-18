@@ -60,8 +60,8 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 |:--|:--|
 | `#5996db` blue **bold** | keyword, including the word-shaped operators `new` `typeof` `sizeof` `and` `not` |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
-| `#9cdcfe` light blue | function and method name, declared or called, builtins included · attribute, label, markdown emphasis |
-| `#97c1ac` mint | type, declared or builtin · package and namespace |
+| `#9cdcfe` light blue | type, declared or builtin · package and namespace · attribute, label, markdown emphasis |
+| `#97c1ac` mint | function and method name, declared or called, builtins included |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |
@@ -72,10 +72,10 @@ That last row is the largest by design, and it is what makes the rest read as
 highlights. It covers variables, parameters, constants, struct fields and
 property accesses. What earns a hue is what you scan a line for: which words
 belong to the language, which are literals, what runs, and what kind of thing a
-name holds. A signature carries several names, so its two hues are ranked: the
-function name takes the brighter light blue and the types the softer mint. In
-`func (req CreateChargeRequest) Validate() error`, `Validate` is still the
-first name you find.
+name holds. A signature carries several names, so it gets two hues of similar
+weight: the types take light blue and the function name mint. In
+`func (req CreateChargeRequest) Validate() error`, `CreateChargeRequest` and
+`error` are light blue and `Validate` is mint.
 
 Types need three rules in VS Code. `entity.name.type` reaches most grammars,
 annotations included where a grammar scopes them as types (Kotlin's
@@ -150,7 +150,7 @@ the two editors behave the same way, both working from a parse tree alone:
 | `time.NewTimer(…)` — an expression | `variable.other` | `(selector_expression)` → `(identifier)` | no |
 
 In an expression the qualifier is indistinguishable from a local variable
-without cross-file knowledge, and both engines say so. The mint therefore lands
+without cross-file knowledge, and both engines say so. The light blue therefore lands
 on `context` in `ctx context.Context` and misses it in
 `context.DeadlineExceeded`, where it stays neutral like any other name in an
 expression. Packages share the hue of types, so inside a qualified type no

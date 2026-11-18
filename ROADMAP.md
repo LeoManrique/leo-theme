@@ -61,7 +61,7 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 
 - **Blue now means keyword.** Previously it also meant type, enum, boolean and
   tag, so it had stopped distinguishing anything. Types and packages moved off
-  it onto a hue of their own, mint `#97c1ac`.
+  it onto a hue of their own, light blue `#9cdcfe`.
 - **Punctuation is purple bold in both editors** — operators, brackets and
   `,` `;` `.` `:`. It is the highest-frequency token class in the corpus, and
   weight is what lets it mark where a call opens or a statement ends without
@@ -79,10 +79,9 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 - **Neutral is now a decision, not a gap.** Struct fields, property accesses,
   declared constants, variables and parameters are all deliberately uncoloured
   in both editors, so a hue there does not compete with the ones that inform.
-- **Function and method names are light blue `#9cdcfe`**, declared or called,
-  builtins included. In a signature the function's name is what you scan for, so
-  it takes the brighter hue and the types around it the softer mint. Gold now
-  means string and nothing else.
+- **Function and method names are mint `#97c1ac`**, declared or called,
+  builtins included, so in a signature they stand apart from the light blue
+  types around them. Gold now means string and nothing else.
 - **The `0x` of a hex literal was bold.** `keyword.other.unit` is a child of
   `keyword` and inherited it; it needs an explicit `fontStyle: ""`. Found by
   tokenising the file rather than by looking at it.
@@ -107,29 +106,29 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   settled, rather than drifting into it.
 - [ ] **Two Go tokens still disagree, both in positions one grammar reads as a
   type and the other does not.** `int(s)` is a conversion: a type to VS Code
-  (mint), a call to Zed (light blue). `case nil:` in a type switch is a type
-  to Zed (mint) and the `nil` literal to VS Code (blue). Neither side can be
+  (light blue), a call to Zed (mint). `case nil:` in a type switch is a type
+  to Zed (light blue) and the `nil` literal to VS Code (blue). Neither side can be
   corrected from a theme file.
 - [ ] **Zed `variant` is still blue `#5996db`.** VS Code puts enum members on
   pale green `#b5cea8` via `variable.other.enummember`, so Rust's `Some` / `Ok`
   probably diverge. VS Code also scopes a tuple variant like `Count(u64)` as a
-  call, so it comes out light blue there. Verify at the `rust/src/main.rs` pass
+  call, so it comes out mint there. Verify at the `rust/src/main.rs` pass
   rather than guessing.
 - [ ] **Builtin types in C, C++, SQL and Java.** Their grammars call `int` or
   `BIGINT` a `storage.type`, like Go's does (`storage.type.sql`,
-  `storage.type.primitive.java`), so they come out blue-bold instead of mint
-  like other types until they get the same treatment `source.go storage.type`
+  `storage.type.primitive.java`), so they come out blue-bold instead of light
+  blue like other types until they get the same treatment `source.go storage.type`
   has. Due at the `05-decomp`, `12-queries.sql` and `Main.java` passes.
 - [ ] **`variable.other.enummember` is still pale green in VS Code** while Zed's
   `constant` is now neutral. Go never reaches it, so it did not show up here.
   Decide at the Rust and TSX passes, together with `variant`.
 - [ ] **Python probably diverges in two places, in opposite directions.**
-  Keyword-argument names (`key` in `f(key=1)`) are light blue in Zed only: its
+  Keyword-argument names (`key` in `f(key=1)`) are mint in Zed only: its
   query captures them `function.kwargs`, which falls back to `function`, while
-  VS Code scopes them as a parameter. Class calls (`Record(...)`) are light blue
+  VS Code scopes them as a parameter. Class calls (`Record(...)`) are mint
   in VS Code only: its grammar gives every user-defined call the same
   `meta.function-call.generic`, while Zed captures a capitalised call
-  `type.class.call`, which is mint. Verify at the `16-script.py` pass rather
+  `type.class.call`, which is light blue. Verify at the `16-script.py` pass rather
   than guessing.
 
 ## Next

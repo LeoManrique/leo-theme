@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Types and packages are mint green instead of neutral.
+- Types and packages are light blue instead of neutral.
+- Function and method names are mint green instead of light blue.
 
 ## 1.2.0
 
