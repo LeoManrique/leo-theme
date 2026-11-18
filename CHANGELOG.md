@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Types and packages are mint green instead of neutral.
+
 ## 1.2.0
 
 - Function and method names are light blue, declared or called, builtins included.

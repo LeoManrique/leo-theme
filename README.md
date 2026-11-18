@@ -11,8 +11,9 @@ A calm dark theme for VS Code and Cursor. Built to highlight important stuff in 
   selection, focus, keywords, and badges.
 - **Warm strings** (`#dec078`) and a **bold calm purple** (`#956ccc`) for punctuation:
   operators, brackets, and `,` `;` `.` `:`, so the structure of a line reads at a glance.
-- **Light blue function names** (`#9cdcfe`), declared or called, while types and
-  packages stay neutral, so the name of what runs is the first thing you find.
+- **Light blue function names** (`#9cdcfe`), declared or called, next to a softer
+  **mint** (`#8abbae`) for types and packages, so the name of what runs is the
+  first thing you find.
 - **Tuned across languages** — JSON, Markdown, shell/bash, Python, JS/TS, CSS, and more.
 - **Semantic highlighting** enabled, with strikethrough for deprecated symbols.
 

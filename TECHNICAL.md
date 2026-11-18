@@ -3,14 +3,15 @@
 - **VS Code source of truth:** [`themes/leo-dark-color-theme.json`](themes/leo-dark-color-theme.json) — edit it directly.
 - **Zed source of truth:** [`themes/leo-dark.json`](themes/leo-dark.json) — schema `v0.2.0`, edit it directly.
 - **Base type:** `vs-dark`. Anything not overridden falls back to VS Code's vs-dark defaults.
-- **Cursor:** runs the VS Code theme file unchanged, from the same `.vsix` ([PUBLISHING.md](PUBLISHING.md)). `install-dev.py` does not link it.
+- **Cursor:** runs the VS Code theme file unchanged, from the same `.vsix` ([PUBLISHING.md](PUBLISHING.md)).
 - The two files are maintained by hand and nothing propagates between them. A fix
   applied to one is not applied to the other until you do it.
 
 ## How it's installed for local editing (no packaging)
 
 ```bash
-python3 install-dev.py            # both editors
+python3 install-dev.py            # every editor found
+python3 install-dev.py --cursor   # one editor (also --vscode, --zed)
 python3 install-dev.py --status   # report what's linked, change nothing
 python3 install-dev.py --uninstall
 ```
@@ -18,11 +19,13 @@ python3 install-dev.py --uninstall
 Link rather than copy. A copied Zed theme goes stale silently and the next parity
 pass compares against the old colors — `--status` reports a stale copy as such.
 
-VS Code gets a **separate extension**, `leo-dev.leo-theme-dev`, labelled
-**"Leo Dark (Dev)"** in the theme picker, whose `themes/` is a symlink to this
-repo. The marketplace install is left alone, for two reasons:
+VS Code and Cursor each get a **separate extension**, `leo-dev.leo-theme-dev`,
+labelled **"Leo Dark (Dev)"** in the theme picker, whose `themes/` is a symlink
+to this repo. It goes in `~/.vscode/extensions` and `~/.cursor/extensions`
+respectively; both editors register an unlisted folder there on the next start.
+The store install is left alone, for two reasons:
 
-- `~/.vscode/extensions/extensions.json` pins `leoshell.leo-theme` with
+- `extensions.json` in that directory pins `leoshell.leo-theme` with
   `"source": "gallery"`. That directory belongs to VS Code's extension manager,
   and an auto-update overwrites anything put there — reverting to the published
   colors mid-session, silently.
@@ -58,6 +61,7 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 | `#5996db` blue **bold** | keyword, including the word-shaped operators `new` `typeof` `sizeof` `and` `not` |
 | `#5996db` blue | the language's own literals: `nil`, `true`, `iota`, `self` |
 | `#9cdcfe` light blue | function and method name, declared or called, builtins included · attribute, label, markdown emphasis |
+| `#8abbae` mint | type, declared or builtin · package and namespace |
 | `#b5cea8` pale green | number, enum member |
 | `#dec078` gold | string, including import paths and runes · `#d5b466` escape sequence |
 | `#649158` green | comment |
@@ -65,12 +69,21 @@ being a highlight, so the default is neutral and a role has to earn a hue.
 | `#d4d4d4` neutral | every other name a program declares |
 
 That last row is the largest by design, and it is what makes the rest read as
-highlights. It covers variables, parameters, constants, types, packages, struct
-fields and property accesses. What earns a hue is what you scan a line for:
-which words belong to the language, which are literals, and what runs. A
-signature carries several names, and a hue spent on its types buries the one
-that matters. In `func (req CreateChargeRequest) Validate() error` the only lit
-name is `Validate`.
+highlights. It covers variables, parameters, constants, struct fields and
+property accesses. What earns a hue is what you scan a line for: which words
+belong to the language, which are literals, what runs, and what kind of thing a
+name holds. A signature carries several names, so its two hues are ranked: the
+function name takes the brighter light blue and the types the softer mint. In
+`func (req CreateChargeRequest) Validate() error`, `Validate` is still the
+first name you find.
+
+Types need three rules in VS Code. `entity.name.type` reaches most grammars,
+annotations included where a grammar scopes them as types (Kotlin's
+`@Component` is `entity.name.type.annotation`). Go writes its builtin types as
+`storage.type`, so `source.go storage.type` moves them off the keyword blue and
+clears the bold. The package scopes are listed apart because half of them do
+not start with `entity.name.type`. In Zed the keys are `type`, `enum` and
+`namespace`.
 
 Punctuation is the one exception to "neutral by default", and it is a weight
 decision as much as a colour one: bold purple makes the structure of a line —
@@ -137,10 +150,11 @@ the two editors behave the same way, both working from a parse tree alone:
 | `time.NewTimer(…)` — an expression | `variable.other` | `(selector_expression)` → `(identifier)` | no |
 
 In an expression the qualifier is indistinguishable from a local variable
-without cross-file knowledge, and both engines say so. A package hue would
-therefore land on `context` in `ctx context.Context` and miss it in
-`context.DeadlineExceeded`. Keeping packages neutral with types means no colour
-depends on which of the two the parser saw.
+without cross-file knowledge, and both engines say so. The mint therefore lands
+on `context` in `ctx context.Context` and misses it in
+`context.DeadlineExceeded`, where it stays neutral like any other name in an
+expression. Packages share the hue of types, so inside a qualified type no
+colour depends on which of the two the parser saw.
 
 ## VS Code → Zed key mapping
 

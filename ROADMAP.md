@@ -6,8 +6,8 @@
   `v0.2.0`. Key mapping lives in [TECHNICAL.md](TECHNICAL.md).
 - **Parity corpus.** `preview/` — one sample per language plus a checklist for the
   state-driven surfaces.
-- **Dev install.** `install-dev.py` links both editors at the repo, so a pass tests
-  the working tree instead of a published snapshot.
+- **Dev install.** `install-dev.py` links VS Code, Cursor and Zed at the repo, so a
+  pass tests the working tree instead of a published snapshot.
 - **Published.** `leoshell.leo-theme` is live on the VS Code Marketplace and on Open
   VSX, which is what Cursor reads. Process in [PUBLISHING.md](PUBLISHING.md).
 
@@ -58,8 +58,8 @@ under-specifying, and exposed that colour was being spent everywhere rather than
 where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 
 - **Blue now means keyword.** Previously it also meant type, enum, boolean and
-  tag, so it had stopped distinguishing anything. Types moved off it and are now
-  neutral, with packages.
+  tag, so it had stopped distinguishing anything. Types and packages moved off
+  it onto a hue of their own, mint `#8abbae`.
 - **Punctuation is purple bold in both editors** — operators, brackets and
   `,` `;` `.` `:`. It is the highest-frequency token class in the corpus, and
   weight is what lets it mark where a call opens or a statement ends without
@@ -75,12 +75,12 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
 - **VS Code learned the roles it was missing** — escape sequences and printf
   placeholders had been falling through to `editor.foreground`.
 - **Neutral is now a decision, not a gap.** Struct fields, property accesses,
-  declared constants, variables, parameters, types and packages are all
-  deliberately uncoloured in both editors, so a hue there does not compete with
-  the ones that inform.
+  declared constants, variables and parameters are all deliberately uncoloured
+  in both editors, so a hue there does not compete with the ones that inform.
 - **Function and method names are light blue `#9cdcfe`**, declared or called,
-  builtins included. In a signature the function's name is what you scan for, and
-  lit types around it buried it. Gold now means string and nothing else.
+  builtins included. In a signature the function's name is what you scan for, so
+  it takes the brighter hue and the types around it the softer mint. Gold now
+  means string and nothing else.
 - **The `0x` of a hex literal was bold.** `keyword.other.unit` is a child of
   `keyword` and inherited it; it needs an explicit `fontStyle: ""`. Found by
   tokenising the file rather than by looking at it.
@@ -105,8 +105,8 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   settled, rather than drifting into it.
 - [ ] **Two Go tokens still disagree, both in positions one grammar reads as a
   type and the other does not.** `int(s)` is a conversion: a type to VS Code
-  (neutral), a call to Zed (light blue). `case nil:` in a type switch is a type
-  to Zed (neutral) and the `nil` literal to VS Code (blue). Neither side can be
+  (mint), a call to Zed (light blue). `case nil:` in a type switch is a type
+  to Zed (mint) and the `nil` literal to VS Code (blue). Neither side can be
   corrected from a theme file.
 - [ ] **Zed `variant` is still blue `#5996db`.** VS Code puts enum members on
   pale green `#b5cea8` via `variable.other.enummember`, so Rust's `Some` / `Ok`
@@ -114,7 +114,7 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   call, so it comes out light blue there. Verify at the `rust/src/main.rs` pass
   rather than guessing.
 - [ ] **C and C++ builtin types.** Their grammars call `int` a `storage.type`,
-  like Go's does, so they will come out blue-bold instead of neutral like other
+  like Go's does, so they will come out blue-bold instead of mint like other
   types until they get the same treatment `source.go storage.type` has. Due at the `05-decomp` pass.
 - [ ] **`variable.other.enummember` is still pale green in VS Code** while Zed's
   `constant` is now neutral. Go never reaches it, so it did not show up here.
@@ -125,7 +125,7 @@ where it informs. The [hue contract](TECHNICAL.md#hue-contract) came out of it:
   VS Code scopes them as a parameter. Class calls (`Record(...)`) are light blue
   in VS Code only: its grammar gives every user-defined call the same
   `meta.function-call.generic`, while Zed captures a capitalised call
-  `type.class.call`, which is neutral. Verify at the `16-script.py` pass rather
+  `type.class.call`, which is mint. Verify at the `16-script.py` pass rather
   than guessing.
 
 ## Next
